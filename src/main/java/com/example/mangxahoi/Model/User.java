@@ -1,11 +1,11 @@
-package com.example.mangxahoi.Entities;
+package com.example.mangxahoi.Model;
 
 import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
 @Table(name = "Users", schema = "dbo", catalog = "MangXaHoi")
-public class UsersEntity {
+public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "UserID", nullable = false)
@@ -112,7 +112,7 @@ public class UsersEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UsersEntity that = (UsersEntity) o;
+        User that = (User) o;
 
         if (userId != that.userId) return false;
         if (fullName != null ? !fullName.equals(that.fullName) : that.fullName != null) return false;

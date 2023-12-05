@@ -1,10 +1,10 @@
-package com.example.mangxahoi.Entities;
+package com.example.mangxahoi.Model;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "Friends", schema = "dbo", catalog = "MangXaHoi")
-public class FriendsEntity {
+public class Friend {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "FriendshipID", nullable = false)
@@ -56,7 +56,7 @@ public class FriendsEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        FriendsEntity that = (FriendsEntity) o;
+        Friend that = (Friend) o;
 
         if (friendshipId != that.friendshipId) return false;
         if (firstUserId != null ? !firstUserId.equals(that.firstUserId) : that.firstUserId != null) return false;

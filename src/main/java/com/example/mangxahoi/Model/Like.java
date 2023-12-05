@@ -1,15 +1,15 @@
-package com.example.mangxahoi.Entities;
+package com.example.mangxahoi.Model;
 
 import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name = "Comments", schema = "dbo", catalog = "MangXaHoi")
-public class CommentsEntity {
+@Table(name = "Likes", schema = "dbo", catalog = "MangXaHoi")
+public class Like {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "CommentID", nullable = false)
-    private int commentId;
+    @Column(name = "LikeID", nullable = false)
+    private int likeId;
     @Basic
     @Column(name = "UserID", nullable = true)
     private Integer userId;
@@ -17,18 +17,15 @@ public class CommentsEntity {
     @Column(name = "PostID", nullable = true)
     private Integer postId;
     @Basic
-    @Column(name = "Content", nullable = false, length = 2147483647)
-    private String content;
-    @Basic
     @Column(name = "Timestamp", nullable = false)
     private Date timestamp;
 
-    public int getCommentId() {
-        return commentId;
+    public int getLikeId() {
+        return likeId;
     }
 
-    public void setCommentId(int commentId) {
-        this.commentId = commentId;
+    public void setLikeId(int likeId) {
+        this.likeId = likeId;
     }
 
     public Integer getUserId() {
@@ -47,14 +44,6 @@ public class CommentsEntity {
         this.postId = postId;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
     public Date getTimestamp() {
         return timestamp;
     }
@@ -68,12 +57,11 @@ public class CommentsEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        CommentsEntity that = (CommentsEntity) o;
+        Like that = (Like) o;
 
-        if (commentId != that.commentId) return false;
+        if (likeId != that.likeId) return false;
         if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
         if (postId != null ? !postId.equals(that.postId) : that.postId != null) return false;
-        if (content != null ? !content.equals(that.content) : that.content != null) return false;
         if (timestamp != null ? !timestamp.equals(that.timestamp) : that.timestamp != null) return false;
 
         return true;
@@ -81,10 +69,9 @@ public class CommentsEntity {
 
     @Override
     public int hashCode() {
-        int result = commentId;
+        int result = likeId;
         result = 31 * result + (userId != null ? userId.hashCode() : 0);
         result = 31 * result + (postId != null ? postId.hashCode() : 0);
-        result = 31 * result + (content != null ? content.hashCode() : 0);
         result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
         return result;
     }

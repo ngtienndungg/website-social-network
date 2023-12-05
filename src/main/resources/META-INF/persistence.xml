@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
     <persistence-unit name="MangXaHoi">
-        <class>com.example.mangxahoi.Entities.CommentsEntity</class>
-        <class>com.example.mangxahoi.Entities.FriendsEntity</class>
-        <class>com.example.mangxahoi.Entities.LikesEntity</class>
-        <class>com.example.mangxahoi.Entities.PostsEntity</class>
-        <class>com.example.mangxahoi.Entities.UsersEntity</class>
+        <class>com.example.mangxahoi.Model.Comment</class>
+        <class>com.example.mangxahoi.Model.Friend</class>
+        <class>com.example.mangxahoi.Model.Like</class>
+        <class>com.example.mangxahoi.Model.Post</class>
+        <class>com.example.mangxahoi.Model.User</class>
         <properties>
             <property name="toplink.jdbc.url" value="jdbc:sqlserver://localhost:1433;database=MangXaHoi"/>
             <property name="toplink.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>

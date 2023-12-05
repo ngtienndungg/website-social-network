@@ -1,6 +1,6 @@
 package com.example.mangxahoi.Controller;
 
-import com.example.mangxahoi.Entities.UsersEntity;
+import com.example.mangxahoi.Model.User;
 import com.example.mangxahoi.JPAManager.JPAConfiguration;
 
 import javax.persistence.EntityManager;
@@ -26,13 +26,13 @@ public class UserController extends HttpServlet {
         EntityManager entityManager = JPAConfiguration.getEntityManager();
         EntityTransaction entityTransaction = entityManager.getTransaction();
         entityTransaction.begin();
-        UsersEntity usersEntity = new UsersEntity();
-        usersEntity.setFullName("Ngo Ngoc Thong");
-        usersEntity.setEmail("ngocthong@gmail.com");
-        usersEntity.setPhoneNumber("0982087930");
-        usersEntity.setPassword("ngocthong");
-        usersEntity.setGender(true);
-        entityManager.persist(usersEntity);
+        User user = new User();
+        user.setFullName("Ngo Ngoc Thong");
+        user.setEmail("ngocthong@gmail.com");
+        user.setPhoneNumber("0982087930");
+        user.setPassword("ngocthong");
+        user.setGender(true);
+        entityManager.persist(user);
         entityTransaction.commit();
         JPAConfiguration.closeEntityManager();
 
