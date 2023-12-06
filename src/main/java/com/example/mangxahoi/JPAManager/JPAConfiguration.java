@@ -14,9 +14,5 @@ public class JPAConfiguration {
         }
         return entityManagerInstance;
     }
-
-    public static void closeEntityManager() {
-        entityManagerInstance.close();
-    }
 }
 
