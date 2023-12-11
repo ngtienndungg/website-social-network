@@ -30,7 +30,6 @@ public class ProfileController extends HttpServlet {
             RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/profile.jsp");
             User user = userService.getUserById(Integer.parseInt(userId));
             List<Post> post = postService.getPostByUserId(Integer.parseInt(userId));
-            System.out.println(post.size() + "haha");
             Logger.getLogger (ProfileController.class.getName()).log(Level.INFO, String.valueOf(post.size()));
             req.setAttribute("post", post);
             req.setAttribute("user", user);
