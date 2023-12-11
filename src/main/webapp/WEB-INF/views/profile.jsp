@@ -6,8 +6,8 @@
 
 <%
     User user = (User) request.getAttribute("user");
-    ArrayList<Post> posts = new ArrayList<>();
-    if ((ArrayList<Post>) request.getAttribute("post") != null) {
+    ArrayList<Post> posts;
+    if (request.getAttribute("post") != null) {
         posts = (ArrayList<Post>) request.getAttribute("post");
     } else {
         posts = new ArrayList<>();
@@ -278,7 +278,7 @@
         <a href="#" class="link-style">Trang chủ</a>
         <a href="#" class="link-style">Bạn bè</a>
         <a href="${pageContext.request.contextPath}/profile/${cookie.userId.value}" class="link-style">Trang cá nhân</a>
-        <a href="#" class="link-style">Đăng xuất</a>
+        <a href="${pageContext.request.contextPath}/logout" class="link-style">Đăng xuất</a>
     </header>
 
     <div class="profile-page tx-13">
