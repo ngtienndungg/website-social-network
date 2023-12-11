@@ -1,16 +1,17 @@
 package com.example.mangxahoi.Controller;
 
+import com.example.mangxahoi.Model.User;
 import com.example.mangxahoi.Service.UserService.UserService;
 import com.example.mangxahoi.Service.UserService.UserServiceImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebServlet("/login")
 public class LoginController extends HttpServlet {
@@ -22,20 +23,19 @@ public class LoginController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String phoneNumber = req.getParameter("phoneNumber");
         String password = req.getParameter("password");
         UserService userService = new UserServiceImpl();
-        if (userService.authenticateUser(phoneNumber, password) != null) {
-            PrintWriter out = resp.getWriter();
-            out.println("<html><body>");
-            out.println("<h1>" + "Login Success" + "</h1>");
-            out.println("</body></html>");
+        User user = userService.authenticateUser(phoneNumber, password);
+        if (user != null) {
+            String userId = String.valueOf(user.getUserId());
+            Cookie cookie = new Cookie("userId", userId);
+            cookie.setMaxAge(60*60*24*60);
+            resp.addCookie(cookie);
+            resp.sendRedirect(req.getContextPath() + "/profile/" + userId);
         } else {
-            PrintWriter out = resp.getWriter();
-            out.println("<html><body>");
-            out.println("<h1>" + "Login Failed" + "</h1>");
-            out.println("</body></html>");
+            resp.sendRedirect(req.getContextPath() + "/login?error=authenticationFailed");
         }
     }
 }

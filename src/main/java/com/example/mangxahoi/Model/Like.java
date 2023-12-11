@@ -10,12 +10,12 @@ public class Like {
     @Id
     @Column(name = "LikeID", nullable = false)
     private int likeId;
-    @Basic
-    @Column(name = "UserID", nullable = true)
-    private Integer userId;
-    @Basic
-    @Column(name = "PostID", nullable = true)
-    private Integer postId;
+    @ManyToOne
+    @JoinColumn(name = "userID")
+    private User userId;
+    @ManyToOne
+    @JoinColumn(name = "PostID")
+    private Post postId;
     @Basic
     @Column(name = "Timestamp", nullable = false)
     private Date timestamp;
@@ -28,19 +28,19 @@ public class Like {
         this.likeId = likeId;
     }
 
-    public Integer getUserId() {
+    public User getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(User userId) {
         this.userId = userId;
     }
 
-    public Integer getPostId() {
+    public Post getPostId() {
         return postId;
     }
 
-    public void setPostId(Integer postId) {
+    public void setPostId(Post postId) {
         this.postId = postId;
     }
 

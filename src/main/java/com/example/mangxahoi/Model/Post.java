@@ -10,9 +10,9 @@ public class Post {
     @Id
     @Column(name = "PostID", nullable = false)
     private int postId;
-    @Basic
-    @Column(name = "UserID", nullable = true)
-    private Integer userId;
+    @ManyToOne
+    @JoinColumn(name = "userID")
+    private User userId;
     @Basic
     @Column(name = "Content", nullable = true, length = 2147483647)
     private String content;
@@ -31,11 +31,11 @@ public class Post {
         this.postId = postId;
     }
 
-    public Integer getUserId() {
+    public User getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(User userId) {
         this.userId = userId;
     }
 

@@ -9,12 +9,12 @@ public class Friend {
     @Id
     @Column(name = "FriendshipID", nullable = false)
     private int friendshipId;
-    @Basic
-    @Column(name = "FirstUserID", nullable = true)
-    private Integer firstUserId;
-    @Basic
-    @Column(name = "SecondUserID", nullable = true)
-    private Integer secondUserId;
+    @ManyToOne
+    @JoinColumn(name = "FirstUserID")
+    private User firstUserId;
+    @ManyToOne
+    @JoinColumn(name = "SecondUserID")
+    private User secondUserId;
     @Basic
     @Column(name = "Status", nullable = false, length = 50)
     private String status;
@@ -27,19 +27,19 @@ public class Friend {
         this.friendshipId = friendshipId;
     }
 
-    public Integer getFirstUserId() {
+    public User getFirstUserId() {
         return firstUserId;
     }
 
-    public void setFirstUserId(Integer firstUserId) {
+    public void setFirstUserId(User firstUserId) {
         this.firstUserId = firstUserId;
     }
 
-    public Integer getSecondUserId() {
+    public User getSecondUserId() {
         return secondUserId;
     }
 
-    public void setSecondUserId(Integer secondUserId) {
+    public void setSecondUserId(User secondUserId) {
         this.secondUserId = secondUserId;
     }
 

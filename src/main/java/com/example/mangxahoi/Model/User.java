@@ -14,6 +14,9 @@ public class User {
     @Column(name = "FullName", nullable = false, length = 255)
     private String fullName;
     @Basic
+    @Column(name = "Biography", nullable = true, length = 2147483647)
+    private String biography;
+    @Basic
     @Column(name = "PhoneNumber", nullable = false, length = 20)
     private String phoneNumber;
     @Basic
@@ -24,7 +27,7 @@ public class User {
     private String password;
     @Basic
     @Column(name = "Gender", nullable = true)
-    private Boolean gender;
+    private boolean gender;
     @Basic
     @Column(name = "DateOfBirth", nullable = true)
     private Date dateOfBirth;
@@ -75,11 +78,11 @@ public class User {
         this.password = password;
     }
 
-    public Boolean getGender() {
+    public boolean getGender() {
         return gender;
     }
 
-    public void setGender(Boolean gender) {
+    public void setGender(boolean gender) {
         this.gender = gender;
     }
 
@@ -107,6 +110,14 @@ public class User {
         this.coverUrl = coverUrl;
     }
 
+    public String getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -119,7 +130,6 @@ public class User {
         if (phoneNumber != null ? !phoneNumber.equals(that.phoneNumber) : that.phoneNumber != null) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        if (gender != null ? !gender.equals(that.gender) : that.gender != null) return false;
         if (dateOfBirth != null ? !dateOfBirth.equals(that.dateOfBirth) : that.dateOfBirth != null) return false;
         if (avatarUrl != null ? !avatarUrl.equals(that.avatarUrl) : that.avatarUrl != null) return false;
         if (coverUrl != null ? !coverUrl.equals(that.coverUrl) : that.coverUrl != null) return false;
@@ -134,7 +144,6 @@ public class User {
         result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (gender != null ? gender.hashCode() : 0);
         result = 31 * result + (dateOfBirth != null ? dateOfBirth.hashCode() : 0);
         result = 31 * result + (avatarUrl != null ? avatarUrl.hashCode() : 0);
         result = 31 * result + (coverUrl != null ? coverUrl.hashCode() : 0);
