@@ -270,6 +270,45 @@
             border: 1px solid #f2f4f9;
             border-radius: 0.25rem;
         }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .modal-content label {
+            margin-bottom: 5px;
+        }
+
+        .modal-content input,
+        .modal-content textarea,
+        .modal-content select {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        .modal-content button {
+            width: auto;
+        }
+
+        .btn-edit-profile {
+            cursor: pointer;
+        }
+
     </style>
 </head>
 <body>
@@ -293,13 +332,13 @@
                         </figure>
                         <div class="cover-body d-flex justify-content-between align-items-center">
                             <div>
-                                <img class="profile-pic" src="https://bootdey.com/img/Content/avatar/avatar6.png"
+                                <img class="profile-pic" src="https://scontent.fsgn8-4.fna.fbcdn.net/v/t39.30808-6/368391007_1674296576410412_6409812752069589827_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=efb6e6&_nc_eui2=AeGtt12twZAdpue64srOXm2c-LtCIqRgH9D4u0IipGAf0Pg8GwVxlgN_n3F8IDf1wFOoSuw3PJaxKYpImLfwH6Dc&_nc_ohc=ZRcJFWiWF3UAX9fxarv&_nc_ht=scontent.fsgn8-4.fna&oh=00_AfAatlOVTAsge1pP6amnoVkpcS6wEPI3jbBnMEHzCYlklQ&oe=657C9580"
                                      alt="profile">
                                 <span class="profile-name"><%= ((User) request.getAttribute("user")).getFullName() %></span>
 
                             </div>
                             <div class="d-none d-md-block">
-                                <button class="btn btn-primary btn-icon-text btn-edit-profile">
+                                <button class="btn btn-primary btn-icon-text btn-edit-profile" onclick="redirectToUpdateProfile()">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                          stroke-linejoin="round" class="feather feather-edit btn-icon-prepend">
@@ -308,6 +347,7 @@
                                     </svg>
                                     Chỉnh sửa thông tin
                                 </button>
+
                             </div>
                         </div>
                     </div>
@@ -595,10 +635,20 @@
         </div>
     </div>
 </div>
+
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function redirectToUpdateProfile() {
+        window.location.href = "<%= request.getContextPath() %>/profile/<%= user.getUserId() %>/updateprofile";
+
+    }
+</script>
 
 </script>
 </body>

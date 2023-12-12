@@ -4,6 +4,7 @@ import com.example.mangxahoi.JPAManager.JPAConfiguration;
 import com.example.mangxahoi.Model.User;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
@@ -38,4 +39,29 @@ public class UserDAOImpl implements UserDAO {
             return null;
         }
     }
+
+    @Override
+    public User createUse(String fullName, String phoneNumber, String email, String password) {
+        try  {
+            EntityManager entityManager = JPAConfiguration.getEntityManager();
+            EntityTransaction transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            User newUser = new User();
+            newUser.setFullName(fullName);
+            newUser.setPhoneNumber(phoneNumber);
+            newUser.setEmail(email);
+            newUser.setPassword(password);
+
+            entityManager.persist(newUser);
+
+            transaction.commit();
+            return newUser;
+        } catch (Exception e) {
+            // Log the error or add error message
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
 }

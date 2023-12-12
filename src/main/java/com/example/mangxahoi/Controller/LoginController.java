@@ -7,10 +7,7 @@ import com.example.mangxahoi.Service.UserService.UserServiceImpl;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 
 @WebServlet("/login")
@@ -34,6 +31,8 @@ public class LoginController extends HttpServlet {
             cookie.setMaxAge(60*60*24*60);
             resp.addCookie(cookie);
             resp.sendRedirect(req.getContextPath() + "/profile/" + userId);
+            HttpSession session = req.getSession();
+            session.setAttribute("user", user);
         } else {
             resp.sendRedirect(req.getContextPath() + "/login?error=authenticationFailed");
         }

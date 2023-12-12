@@ -99,7 +99,8 @@
 
             </div>
 
-            <p class="text-muted text-center mt-3 mb-0">Bạn chưa có tài khoản? <a href class="text-primary ml-1">Đăng ký ngay</a></p>
+            <p class="text-muted text-center mt-3 mb-0">Bạn chưa có tài khoản? <a href="${pageContext.request.contextPath}/register" class="text-primary ml-1">Đăng ký ngay</a></p>
+
 
         </div>
 
