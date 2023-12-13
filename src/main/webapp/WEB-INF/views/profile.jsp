@@ -2,7 +2,6 @@
 <%@ page import="com.example.mangxahoi.Model.User" %>
 <%@ page import="com.example.mangxahoi.Model.Post" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="java.net.URLDecoder" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -329,7 +328,7 @@
 <div class="container">
     <header>
         <a href="#" class="link-style">Trang chủ</a>
-        <a href="#" class="link-style">Bạn bè</a>
+        <a href="${pageContext.request.contextPath}/friend-request" class="link-style">Yêu cầu kết bạn</a>
         <a href="${pageContext.request.contextPath}/profile/${cookie.userId.value}" class="link-style">Trang cá nhân</a>
         <a href="${pageContext.request.contextPath}/logout" class="link-style">Đăng xuất</a>
     </header>

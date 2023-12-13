@@ -1,4 +1,4 @@
-package com.example.mangxahoi.DAO.Post;
+package com.example.mangxahoi.DAO.PostDAO;
 
 import com.example.mangxahoi.JPAManager.JPAConfiguration;
 import com.example.mangxahoi.Model.Post;
