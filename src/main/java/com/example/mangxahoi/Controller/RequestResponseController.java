@@ -15,6 +15,18 @@ import java.io.IOException;
 public class RequestResponseController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        int friendID = Integer.parseInt(req.getParameter("friendID"));
+        FriendService friendService = new FriendServiceImpl();
+        Cookie[] cookies = req.getCookies();
+        int userId = 0;
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("userId")) {
+                userId = Integer.parseInt(cookie.getValue());
+            }
+        }
+        System.out.println(userId + " / " + friendID);
+        friendService.acceptRequest(userId, friendID);
+        String redirectUrl = req.getContextPath() + "/friend-request";
+        resp.sendRedirect(redirectUrl);
     }
 }
