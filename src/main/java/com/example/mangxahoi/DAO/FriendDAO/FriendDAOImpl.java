@@ -1,11 +1,12 @@
 package com.example.mangxahoi.DAO.FriendDAO;
 
-import com.example.mangxahoi.JPAManager.JPAConfiguration;
 import com.example.mangxahoi.Entity.Friend;
 import com.example.mangxahoi.Entity.User;
+import com.example.mangxahoi.JPAManager.JPAConfiguration;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class FriendDAOImpl implements FriendDAO {
     }
 
     @Override
-    public Friend updateFriendStatus(int firstUserId, int secondUserId, String status) {
+    public void updateFriendStatus(int firstUserId, int secondUserId, String status) {
         EntityManager entityManager = JPAConfiguration.getEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
@@ -53,17 +54,69 @@ public class FriendDAOImpl implements FriendDAO {
             entityManager.merge(friend);
             transaction.commit();
 
-            return friend;
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
             e.printStackTrace();
-            return null;
         } finally {
             entityManager.close();
         }
     }
 
+    @Override
+    public void createFriend(int firstUserId, int secondUserId) {
+        EntityManager entityManager = JPAConfiguration.getEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+            long existingCount = (long) entityManager.createQuery(
+                            "SELECT COUNT(f) FROM Friend f " +
+                                    "WHERE (f.firstUserId.userId = :firstUserId AND f.secondUserId.userId = :secondUserId) " +
+                                    "OR (f.firstUserId.userId = :secondUserId AND f.secondUserId.userId = :firstUserId)"
+                    )
+                    .setParameter("firstUserId", firstUserId)
+                    .setParameter("secondUserId", secondUserId)
+                    .getSingleResult();
+            if (existingCount == 0) {
+                User firstUser = entityManager.find(User.class, firstUserId);
+                User secondUser = entityManager.find(User.class, secondUserId);
+                Friend friend = new Friend();
+                friend.setFirstUserId(firstUser);
+                friend.setSecondUserId(secondUser);
+                friend.setStatus("Pending");
+                entityManager.persist(friend);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public String getFriendStatus(int firstUserId, int secondUserId) {
+        EntityManager entityManager = JPAConfiguration.getEntityManager();
+        try {
+            return entityManager.createQuery(
+                            "SELECT f.status FROM Friend f " +
+                                    "WHERE (f.firstUserId.userId = :firstUserId AND f.secondUserId.userId = :secondUserId) " +
+                                    "OR (f.firstUserId.userId = :secondUserId AND f.secondUserId.userId = :firstUserId)",
+                            String.class
+                    )
+                    .setParameter("firstUserId", firstUserId)
+                    .setParameter("secondUserId", secondUserId)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return "No relationship";
+        } finally {
+            entityManager.close();
+        }
+    }
 
 }

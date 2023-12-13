@@ -2,6 +2,8 @@
 <%@ page import="com.example.mangxahoi.Entity.User" %>
 <%@ page import="com.example.mangxahoi.Entity.Post" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="com.example.mangxahoi.Service.FriendService.FriendService" %>
+<%@ page import="com.example.mangxahoi.Service.FriendService.FriendServiceImpl" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -17,17 +19,27 @@
 <c:set var="userId" value=""/>
 
 <%
+    int currentUserId = 0;
     javax.servlet.http.Cookie[] cookies = request.getCookies();
     if (cookies != null) {
         for (javax.servlet.http.Cookie cookie : cookies) {
             if (cookie.getName().equals("userId")) {
                 pageContext.setAttribute("userId", cookie.getValue());
+                currentUserId = Integer.parseInt(cookie.getValue());
             }
         }
     }
+
+    String profileId = request.getAttribute("pathInfo").toString();
+    System.out.println("Test: " + profileId);
+
+    FriendService friendService = new FriendServiceImpl();
+    String friendStatus = friendService.getFriendStatus(user.getUserId(), currentUserId);
 %>
 
+<c:set var="profileId" value="<%= profileId %>"/>
 <c:set var="gender" value="<%= user.getGender() %>"/>
+<c:set var="status" value="<%= friendStatus %>"/>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -352,20 +364,75 @@
 
                             </div>
                             <div class="d-none d-md-block">
-                                <form id="updateProfileForm" method="get"
-                                      action="${pageContext.request.contextPath}/profile/${userId}/updateprofile">
-                                    <button type="submit" class="btn btn-primary btn-icon-text btn-edit-profile">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24"
-                                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                             stroke-linejoin="round" class="feather feather-edit btn-icon-prepend">
-                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                        </svg>
-                                        Chỉnh sửa thông tin
-                                    </button>
-                                </form>
+                                <c:choose>
+                                    <c:when test="${userId == profileId}">
+                                        <form id="updateProfileForm" method="get"
+                                              action="${pageContext.request.contextPath}/profile/${userId}/updateprofile">
+                                            <button type="submit"
+                                                    class="btn btn-primary btn-icon-text btn-edit-profile">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                     viewBox="0 0 24 24"
+                                                     fill="none" stroke="currentColor" stroke-width="2"
+                                                     stroke-linecap="round"
+                                                     stroke-linejoin="round"
+                                                     class="feather feather-edit btn-icon-prepend">
+                                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                                </svg>
+                                                Chỉnh sửa thông tin
+                                            </button>
+                                        </form>
+                                    </c:when>
+                                    <c:when test="${status == 'Pending' }">
+                                        <style>
+                                            .profile-form {
+                                                margin-bottom: 20px;
+                                            }
+                                        </style>
 
+                                        <form id="acceptForm" class="profile-form" action="${pageContext.request.contextPath}/request-response" method="post">
+                                            <input type="hidden" name="friendID" value="${profileId}">
+                                            <input type="hidden" name="profile" value="profile">
+                                            <button type="submit"
+                                                    class="btn btn-primary btn-icon-text btn-edit-profile">
+                                                Chấp nhận
+                                            </button>
+                                        </form>
+
+                                        <style>
+                                            .profile-form {
+                                                margin-bottom: 20px;
+                                            }
+
+                                            .reject-button {
+                                                background-color: red;
+                                                color: white; /* Để đảm bảo văn bản trên button có đủ độ tương phản */
+                                            }
+                                        </style>
+                                        <form id="rejectForm" class="profile-form" method="get"
+                                              action="${pageContext.request.contextPath}/profile/${userId}/updateprofile">
+                                            <button type="submit"
+                                                    class="btn btn-primary btn-icon-text btn-edit-profile reject-button">
+                                                Từ chối
+                                            </button>
+                                        </form>
+                                    </c:when>
+                                    <c:when test="${status == 'Friend' }">
+                                        <button type="submit"
+                                                class="btn btn-primary btn-icon-text btn-edit-profile">
+                                            Friend
+                                        </button>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <form id="addFriendForm" method="post"
+                                              action="${pageContext.request.contextPath}/add-friend">
+                                            <input type="hidden" name="friendId" value="${profileId}">
+                                            <button type="submit" class="btn btn-primary btn-icon-text btn-add-friend">
+                                                Thêm bạn
+                                            </button>
+                                        </form>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
                     </div>

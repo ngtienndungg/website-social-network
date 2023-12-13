@@ -35,6 +35,8 @@ public class ProfileController extends HttpServlet {
                     User user = userService.getUserById(Integer.parseInt(userId));
                     List<Post> post = postService.getPostByUserId(Integer.parseInt(userId));
                     Logger.getLogger(ProfileController.class.getName()).log(Level.INFO, String.valueOf(post.size()));
+                    req.setAttribute("pathInfo", userId);
+                    System.out.println(userId);
                     req.setAttribute("post", post);
                     req.setAttribute("user", user);
                     dispatcher.forward(req, resp);
