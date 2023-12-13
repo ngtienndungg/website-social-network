@@ -333,6 +333,97 @@
         .btn-edit-profile {
             cursor: pointer;
         }
+        #postDialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+            z-index: 1000;
+            height: 500px; /* Điều chỉnh chiều cao tại đây */
+        }
+
+        #postDialog textarea {
+            width: 100%;
+            height: 100px; /* Điều chỉnh chiều cao tại đây */
+            margin-bottom: 10px;
+        }
+
+        #postButton {
+            cursor: pointer;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .closeButton {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #999999;
+        }
+
+        #imageInput {
+            display: none;
+        }
+
+        #imageDisplay {
+            width: 100%;
+            height: 150px; /* Điều chỉnh chiều cao tại đây */
+            margin-bottom: 10px;
+        }
+
+        #addImageButton {
+            cursor: pointer;
+            padding: 10px 20px;
+            margin-top: 10px; /* Thêm margin-top để tạo khoảng cách giữa các nút */
+            background-color: #3498db;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #addImageButton {
+            margin-right: 10px; /* Thêm margin-right để tạo khoảng cách giữa nút "Thêm ảnh" và nút "Đăng" */
+        }
+        #imageFrame {
+            width: 100%; /* Đặt chiều rộng của khung ảnh là 100% */
+            height: 300px; /* Đặt chiều cao của khung ảnh */
+            border: 1px solid #ccc; /* Đặt đường viền cho khung ảnh */
+            overflow: hidden; /* Ngăn chặn ảnh vượt qua khung */
+        }
+
+        #imagePreview {
+            max-width: 100%;
+            max-height: 100%;/* Giữ chiều cao của ảnh không vượt qua chiều cao của khung */
+            display: block;
+            margin: auto;
+        }
+
+        #likeButton {
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        #likeButton.active {
+            color: red; /* Màu khi nút đã được like */
+        }
+
+        #likeButton.active svg path {
+            fill: red; /* Đổi màu hình trái tim khi nút đã được like */
+        }
+
 
     </style>
 </head>
@@ -491,11 +582,12 @@
                             <li class="header-link-item ml-3 pl-3 border-left d-flex align-items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                     stroke-linejoin="round" class="feather feather-user mr-1 icon-md">
+                                     stroke-linejoin="round" class="feather feather-user mr-1 icon-md" id="userIcon">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="12" cy="7" r="4"></circle>
                                 </svg>
-                                <a class="pt-1px d-none d-md-block" href="#">Thông tin người dùng</a>
+                                <a class="pt-1px d-none d-md-block" href="#" id="userInfoLink">Tạo Bài Viết </a>
+
                             </li>
                             <li class="header-link-item ml-3 pl-3 border-left d-flex align-items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -731,14 +823,16 @@
                                     <div class="card-footer">
                                         <div class="d-flex post-actions">
                                             <a href="javascript:;" class="d-flex align-items-center text-muted mr-4">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2"
-                                                     stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-heart icon-md">
-                                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                                                </svg>
-                                                <p class="d-none d-md-block ml-2">Like</p>
+                                                <div id="likeButton" onclick="toggleLike()">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                         class="feather feather-heart icon-md">
+                                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                                    </svg>
+                                                    <p class="d-none d-md-block ml-2">Like</p>
+                                                </div>
+
                                             </a>
                                             <a href="javascript:;" class="d-flex align-items-center text-muted mr-4">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -773,6 +867,16 @@
         </div>
     </div>
 </div>
+<div id="postDialog">
+    <span class="closeButton" onclick="closePostDialog()">&times;</span>
+    <textarea id="postContent" placeholder="Nhập nội dung bài viết"></textarea>
+    <div id="imageFrame">
+        <img id="imagePreview" alt="Image Preview">
+    </div>
+    <button id="addImageButton" onclick="openImageInput()">Thêm ảnh</button>
+    <input type="file" id="imageInput" onchange="previewImage()">
+    <button id="postButton" onclick="closePostDialog()">Đăng</button>
+</div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
@@ -787,6 +891,50 @@
 
     }
 </script>
+<script>
+    function openPostDialog() {
+        document.getElementById('postDialog').style.display = 'block';
+    }
+
+    function closePostDialog() {
+        document.getElementById('postDialog').style.display = 'none';
+        // Reset input file và hình xem trước khi đóng dialog
+        document.getElementById('imageInput').value = '';
+        document.getElementById('imagePreview').innerHTML = '';
+        document.getElementById('postContent').value = ''; // Reset giá trị của textarea nội dung
+    }
+
+    function openImageInput() {
+        document.getElementById('imageInput').click();
+    }
+
+    // Bắt sự kiện khi nhấn vào liên kết "Thông tin người dùng"
+    document.getElementById('userInfoLink').addEventListener('click', function(event) {
+        event.preventDefault();
+        // Mở dialog khi nhấn vào liên kết "Thông tin người dùng"
+        openPostDialog();
+    });
+    function previewImage() {
+        var input = document.getElementById('imageInput');
+        var imagePreview = document.getElementById('imagePreview');
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                // Hiển thị ảnh trong thẻ <img> trong khung
+                imagePreview.src = e.target.result;
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+<script>
+    function toggleLike() {
+        var likeButton = document.getElementById('likeButton');
+        likeButton.classList.toggle('active');
+    }
 
 </script>
 </body>
