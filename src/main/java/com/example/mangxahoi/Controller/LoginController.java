@@ -28,7 +28,7 @@ public class LoginController extends HttpServlet {
         if (user != null) {
             String userId = String.valueOf(user.getUserId());
             Cookie cookie = new Cookie("userId", userId);
-            cookie.setMaxAge(60*60*24*60);
+            cookie.setMaxAge(60 * 60 * 24 * 60);
             resp.addCookie(cookie);
             resp.sendRedirect(req.getContextPath() + "/profile/" + userId);
             HttpSession session = req.getSession();

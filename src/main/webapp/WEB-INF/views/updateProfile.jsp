@@ -1,9 +1,22 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.example.mangxahoi.Model.User" %>
+<%@ page import="com.example.mangxahoi.Service.UserService.UserService" %>
+<%@ page import="com.example.mangxahoi.Service.UserService.UserServiceImpl" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    User user = (User) request.getSession().getAttribute("user");
+    User user = null;
+    Cookie[] cookies = request.getCookies();
+    for (Cookie cookie : cookies) {
+        if (cookie.getName().equals("userId")) {
+            UserService userService = new UserServiceImpl();
+            user = userService.getUserById(Integer.valueOf(cookie.getValue().toString()));
+        }
+    }
 %>
+
+<c:set var="loggedInUser" value="<%= user %>" scope="session"/>
+
 <html>
 <head>
     <title>Update Thông Tin </title>
@@ -56,7 +69,9 @@
     </style>
 </head>
 <body>
-<form id="editForm" action="/updateprofile" method="post">
+<form id="editForm" action="<%= request.getContextPath() %>/updateprofile" method="post">
+    <input type="hidden" id="baseUrl" value="<%= request.getContextPath() %>">
+
     <label for="fullName">Full Name:</label>
     <input type="text" id="fullName" name="fullName" value="<%= user.getFullName() %>">
 
@@ -73,17 +88,10 @@
     </select>
 
     <div>
-        <button type="button" onclick="saveChanges()">Save Changes</button>
+        <button type="submit">Lưu lại thay đổi</button>
         <button type="button" class="secondary" onclick="closeModal()">Close</button>
     </div>
 </form>
-<script>
-    function closeModal() {
-        // Redirect to /profile when closing the modal
-        window.location.href = '/MangXaHoi/profile/<%= user.getUserId() %>';
-    }
 
-
-</script>
 </body>
 </html>

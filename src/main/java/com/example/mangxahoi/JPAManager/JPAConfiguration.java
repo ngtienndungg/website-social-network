@@ -8,7 +8,7 @@ public class JPAConfiguration {
     private static EntityManager entityManagerInstance = null;
 
     public static EntityManager getEntityManager() {
-        if (entityManagerInstance == null) {
+        if (entityManagerInstance == null || !entityManagerInstance.isOpen()) {
             entityManagerInstance = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME).createEntityManager();
             return entityManagerInstance;
         }

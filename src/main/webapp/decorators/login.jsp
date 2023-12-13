@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-    <%@include file="/common/login/header.jsp"%>
-    <decorator:body></decorator:body>
+<%@include file="/common/login/header.jsp" %>
+<decorator:body></decorator:body>
 </body>
 </html>

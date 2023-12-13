@@ -2,6 +2,7 @@
 <%@ page import="com.example.mangxahoi.Model.User" %>
 <%@ page import="com.example.mangxahoi.Model.Post" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="java.net.URLDecoder" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -14,6 +15,18 @@
     }
 %>
 
+<c:set var="userId" value=""/>
+
+<%
+    javax.servlet.http.Cookie[] cookies = request.getCookies();
+    if (cookies != null) {
+        for (javax.servlet.http.Cookie cookie : cookies) {
+            if (cookie.getName().equals("userId")) {
+                pageContext.setAttribute("userId", cookie.getValue());
+            }
+        }
+    }
+%>
 
 <c:set var="gender" value="<%= user.getGender() %>"/>
 
@@ -270,6 +283,7 @@
             border: 1px solid #f2f4f9;
             border-radius: 0.25rem;
         }
+
         .modal {
             display: none;
             position: fixed;
@@ -332,21 +346,26 @@
                         </figure>
                         <div class="cover-body d-flex justify-content-between align-items-center">
                             <div>
-                                <img class="profile-pic" src="https://scontent.fsgn8-4.fna.fbcdn.net/v/t39.30808-6/368391007_1674296576410412_6409812752069589827_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=efb6e6&_nc_eui2=AeGtt12twZAdpue64srOXm2c-LtCIqRgH9D4u0IipGAf0Pg8GwVxlgN_n3F8IDf1wFOoSuw3PJaxKYpImLfwH6Dc&_nc_ohc=ZRcJFWiWF3UAX9fxarv&_nc_ht=scontent.fsgn8-4.fna&oh=00_AfAatlOVTAsge1pP6amnoVkpcS6wEPI3jbBnMEHzCYlklQ&oe=657C9580"
+                                <img class="profile-pic"
+                                     src="https://scontent.fsgn8-4.fna.fbcdn.net/v/t39.30808-6/368391007_1674296576410412_6409812752069589827_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=efb6e6&_nc_eui2=AeGtt12twZAdpue64srOXm2c-LtCIqRgH9D4u0IipGAf0Pg8GwVxlgN_n3F8IDf1wFOoSuw3PJaxKYpImLfwH6Dc&_nc_ohc=ZRcJFWiWF3UAX9fxarv&_nc_ht=scontent.fsgn8-4.fna&oh=00_AfAatlOVTAsge1pP6amnoVkpcS6wEPI3jbBnMEHzCYlklQ&oe=657C9580"
                                      alt="profile">
                                 <span class="profile-name"><%= ((User) request.getAttribute("user")).getFullName() %></span>
 
                             </div>
                             <div class="d-none d-md-block">
-                                <button class="btn btn-primary btn-icon-text btn-edit-profile" onclick="redirectToUpdateProfile()">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                         stroke-linejoin="round" class="feather feather-edit btn-icon-prepend">
-                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                    </svg>
-                                    Chỉnh sửa thông tin
-                                </button>
+                                <form id="updateProfileForm" method="get"
+                                      action="${pageContext.request.contextPath}/profile/${userId}/updateprofile">
+                                    <button type="submit" class="btn btn-primary btn-icon-text btn-edit-profile">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                             viewBox="0 0 24 24"
+                                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                             stroke-linejoin="round" class="feather feather-edit btn-icon-prepend">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                        </svg>
+                                        Chỉnh sửa thông tin
+                                    </button>
+                                </form>
 
                             </div>
                         </div>
@@ -379,7 +398,8 @@
                                     <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
                                     <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                                 </svg>
-                                <a class="pt-1px d-none d-md-block" href="#">Bạn bè <span class="text-muted tx-12">3,765</span></a>
+                                <a class="pt-1px d-none d-md-block" href="#">Bạn bè <span
+                                        class="text-muted tx-12">3,765</span></a>
                             </li>
                             <li class="header-link-item ml-3 pl-3 border-left d-flex align-items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -533,9 +553,11 @@
                                             </div>
                                             <div class="dropdown">
                                                 <button class="btn p-0" type="button" id="dropdownMenuButton3"
-                                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        data-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                         stroke-width="2"
                                                          stroke-linecap="round" stroke-linejoin="round"
                                                          class="feather feather-more-horizontal icon-lg pb-3px">
                                                         <circle cx="12" cy="12" r="1"></circle>
@@ -547,7 +569,8 @@
                                                     <a class="dropdown-item d-flex align-items-center" href="#">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                              viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                             stroke-width="2" stroke-linecap="round"
+                                                             stroke-linejoin="round"
                                                              class="feather feather-meh icon-sm mr-2">
                                                             <circle cx="12" cy="12" r="10"></circle>
                                                             <line x1="8" y1="15" x2="16" y2="15"></line>
@@ -558,7 +581,8 @@
                                                     <a class="dropdown-item d-flex align-items-center" href="#">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                              viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                             stroke-width="2" stroke-linecap="round"
+                                                             stroke-linejoin="round"
                                                              class="feather feather-corner-right-up icon-sm mr-2">
                                                             <polyline points="10 9 15 4 20 9"></polyline>
                                                             <path d="M4 20h7a4 4 0 0 0 4-4V4"></path>
@@ -567,7 +591,8 @@
                                                     <a class="dropdown-item d-flex align-items-center" href="#">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                              viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                             stroke-width="2" stroke-linecap="round"
+                                                             stroke-linejoin="round"
                                                              class="feather feather-share-2 icon-sm mr-2">
                                                             <circle cx="18" cy="5" r="3"></circle>
                                                             <circle cx="6" cy="12" r="3"></circle>
@@ -579,9 +604,11 @@
                                                     <a class="dropdown-item d-flex align-items-center" href="#">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                              viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                             stroke-width="2" stroke-linecap="round"
+                                                             stroke-linejoin="round"
                                                              class="feather feather-copy icon-sm mr-2">
-                                                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                                            <rect x="9" y="9" width="13" height="13" rx="2"
+                                                                  ry="2"></rect>
                                                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                                                         </svg>
                                                         <span class>Copy link</span></a>
@@ -597,7 +624,8 @@
                                         <div class="d-flex post-actions">
                                             <a href="javascript:;" class="d-flex align-items-center text-muted mr-4">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                     stroke-width="2"
                                                      stroke-linecap="round" stroke-linejoin="round"
                                                      class="feather feather-heart icon-md">
                                                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
@@ -606,7 +634,8 @@
                                             </a>
                                             <a href="javascript:;" class="d-flex align-items-center text-muted mr-4">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                     stroke-width="2"
                                                      stroke-linecap="round" stroke-linejoin="round"
                                                      class="feather feather-message-square icon-md">
                                                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
@@ -615,7 +644,8 @@
                                             </a>
                                             <a href="javascript:;" class="d-flex align-items-center text-muted">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                     stroke-width="2"
                                                      stroke-linecap="round" stroke-linejoin="round"
                                                      class="feather feather-share icon-md">
                                                     <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>

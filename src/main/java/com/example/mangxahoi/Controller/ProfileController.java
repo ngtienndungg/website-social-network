@@ -6,7 +6,6 @@ import com.example.mangxahoi.Service.PostService.PostService;
 import com.example.mangxahoi.Service.PostService.PostServiceImpl;
 import com.example.mangxahoi.Service.UserService.UserService;
 import com.example.mangxahoi.Service.UserService.UserServiceImpl;
-import com.nimbusds.jose.shaded.json.JSONObject;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -24,22 +23,39 @@ public class ProfileController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String pathInfo = req.getPathInfo();
+        System.out.println(pathInfo);
         UserService userService = new UserServiceImpl();
         PostService postService = new PostServiceImpl();
+
         if (pathInfo != null) {
-            String userId = pathInfo.substring(1);
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/profile.jsp");
-            User user = userService.getUserById(Integer.parseInt(userId));
-            List<Post> post = postService.getPostByUserId(Integer.parseInt(userId));
-            Logger.getLogger (ProfileController.class.getName()).log(Level.INFO, String.valueOf(post.size()));
-            req.setAttribute("post", post);
-            req.setAttribute("user", user);
-            dispatcher.forward(req, resp);
+            if (pathInfo.matches("/\\d+")) {
+                try {
+                    String userId = pathInfo.substring(1);
+                    RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/profile.jsp");
+                    User user = userService.getUserById(Integer.parseInt(userId));
+                    List<Post> post = postService.getPostByUserId(Integer.parseInt(userId));
+                    Logger.getLogger(ProfileController.class.getName()).log(Level.INFO, String.valueOf(post.size()));
+                    req.setAttribute("post", post);
+                    req.setAttribute("user", user);
+                    dispatcher.forward(req, resp);
+                } catch (NumberFormatException e) {
+                    Logger.getLogger(ProfileController.class.getName()).log(Level.SEVERE, "Invalid userId format", e);
+                    resp.sendRedirect(req.getContextPath() + "/errorPage.jsp");
+                }
+            } else if (pathInfo.matches("/\\d+/updateprofile")) {
+                try {
+                    String userId = pathInfo.split("/")[1];
+                    RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/updateProfile.jsp");
+                    User user = userService.getUserById(Integer.parseInt(userId));
+                    req.setAttribute("user", user);
+                    dispatcher.forward(req, resp);
+                } catch (NumberFormatException e) {
+                    Logger.getLogger(ProfileController.class.getName()).log(Level.SEVERE, "Invalid userId format", e);
+                    resp.sendRedirect(req.getContextPath() + "/errorPage.jsp");
+                }
+            }
         } else {
             resp.sendRedirect(req.getContextPath() + "/errorPage.jsp");
         }
     }
 }
-
-
-

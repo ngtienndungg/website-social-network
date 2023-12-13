@@ -11,16 +11,16 @@ import java.util.List;
 public class PostDAOImpl implements PostDAO {
     @Override
     public List<Post> findPostByUserId(int userId) {
-            try {
-                EntityManager entityManager = JPAConfiguration.getEntityManager();
-                TypedQuery<Post> query = entityManager.createQuery(
-                        "SELECT post FROM Post post WHERE post.userId.userId = :id",
-                        Post.class
-                );
-                query.setParameter("id", userId);
-                return query.getResultList();
-            } catch (NoResultException e) {
-                return null;
-            }
+        try {
+            EntityManager entityManager = JPAConfiguration.getEntityManager();
+            TypedQuery<Post> query = entityManager.createQuery(
+                    "SELECT post FROM Post post WHERE post.userId.userId = :id",
+                    Post.class
+            );
+            query.setParameter("id", userId);
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }

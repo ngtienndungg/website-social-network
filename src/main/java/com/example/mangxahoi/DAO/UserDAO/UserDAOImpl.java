@@ -11,8 +11,8 @@ import javax.persistence.TypedQuery;
 public class UserDAOImpl implements UserDAO {
     @Override
     public User findUserByPhoneNumberAndPassword(String phoneNumber, String password) {
+        EntityManager entityManager = JPAConfiguration.getEntityManager();
         try {
-            EntityManager entityManager = JPAConfiguration.getEntityManager();
             TypedQuery<User> query = entityManager.createQuery(
                     "SELECT user FROM User user WHERE user.phoneNumber = :phoneNumber AND user.password = :password",
                     User.class
@@ -22,13 +22,16 @@ public class UserDAOImpl implements UserDAO {
             return query.getSingleResult();
         } catch (NoResultException e) {
             return null;
+        } finally {
+            entityManager.close();
         }
     }
 
     @Override
     public User findUserById(int userId) {
+        EntityManager entityManager = JPAConfiguration.getEntityManager();
         try {
-            EntityManager entityManager = JPAConfiguration.getEntityManager();
+
             TypedQuery<User> query = entityManager.createQuery(
                     "SELECT user FROM User user WHERE user.id = :id",
                     User.class
@@ -37,13 +40,15 @@ public class UserDAOImpl implements UserDAO {
             return query.getSingleResult();
         } catch (NoResultException e) {
             return null;
+        } finally {
+            entityManager.close();
         }
     }
 
     @Override
-    public User createUse(String fullName, String phoneNumber, String email, String password) {
-        try  {
-            EntityManager entityManager = JPAConfiguration.getEntityManager();
+    public User registerUser(String fullName, String phoneNumber, String email, String password, boolean gender) {
+        EntityManager entityManager = JPAConfiguration.getEntityManager();
+        try {
             EntityTransaction transaction = entityManager.getTransaction();
             transaction.begin();
 
@@ -51,6 +56,7 @@ public class UserDAOImpl implements UserDAO {
             newUser.setFullName(fullName);
             newUser.setPhoneNumber(phoneNumber);
             newUser.setEmail(email);
+            newUser.setGender(gender);
             newUser.setPassword(password);
 
             entityManager.persist(newUser);
@@ -58,10 +64,44 @@ public class UserDAOImpl implements UserDAO {
             transaction.commit();
             return newUser;
         } catch (Exception e) {
-            // Log the error or add error message
             e.printStackTrace();
             throw e;
+        } finally {
+            entityManager.close();
         }
     }
 
+    @Override
+    public User updateUserInformation(int userId, String fullName, String email, String biography, boolean gender) {
+        EntityManager entityManager = JPAConfiguration.getEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            // Retrieve the user by userId
+            User userToUpdate = entityManager.find(User.class, userId);
+
+            if (userToUpdate != null) {
+                userToUpdate.setFullName(fullName);
+                userToUpdate.setEmail(email);
+                userToUpdate.setBiography(biography);
+                userToUpdate.setGender(gender);
+                entityManager.merge(userToUpdate);
+                transaction.commit();
+                return userToUpdate;
+            } else {
+                transaction.rollback();
+                return null;
+            }
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            throw e;
+        } finally {
+            entityManager.close();
+        }
+    }
 }
