@@ -1,7 +1,7 @@
 package com.example.mangxahoi.Controller;
 
-import com.example.mangxahoi.Model.Post;
-import com.example.mangxahoi.Model.User;
+import com.example.mangxahoi.Entity.Post;
+import com.example.mangxahoi.Entity.User;
 import com.example.mangxahoi.Service.PostService.PostService;
 import com.example.mangxahoi.Service.PostService.PostServiceImpl;
 import com.example.mangxahoi.Service.UserService.UserService;

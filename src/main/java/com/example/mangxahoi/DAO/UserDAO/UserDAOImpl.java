@@ -1,7 +1,7 @@
 package com.example.mangxahoi.DAO.UserDAO;
 
 import com.example.mangxahoi.JPAManager.JPAConfiguration;
-import com.example.mangxahoi.Model.User;
+import com.example.mangxahoi.Entity.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;

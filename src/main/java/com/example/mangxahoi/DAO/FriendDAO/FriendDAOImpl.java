@@ -1,8 +1,8 @@
 package com.example.mangxahoi.DAO.FriendDAO;
 
 import com.example.mangxahoi.JPAManager.JPAConfiguration;
-import com.example.mangxahoi.Model.Friend;
-import com.example.mangxahoi.Model.User;
+import com.example.mangxahoi.Entity.Friend;
+import com.example.mangxahoi.Entity.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -37,7 +37,6 @@ public class FriendDAOImpl implements FriendDAO {
     public Friend updateFriendStatus(int firstUserId, int secondUserId, String status) {
         EntityManager entityManager = JPAConfiguration.getEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
-
         try {
             transaction.begin();
 
@@ -51,7 +50,7 @@ public class FriendDAOImpl implements FriendDAO {
                     .getSingleResult();
 
             friend.setStatus(status);
-
+            entityManager.merge(friend);
             transaction.commit();
 
             return friend;

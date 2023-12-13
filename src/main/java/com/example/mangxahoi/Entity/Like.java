@@ -1,4 +1,4 @@
-package com.example.mangxahoi.Model;
+package com.example.mangxahoi.Entity;
 
 import javax.persistence.*;
 import java.sql.Date;

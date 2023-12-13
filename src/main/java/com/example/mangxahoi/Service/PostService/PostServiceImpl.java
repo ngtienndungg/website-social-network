@@ -2,7 +2,7 @@ package com.example.mangxahoi.Service.PostService;
 
 import com.example.mangxahoi.DAO.PostDAO.PostDAO;
 import com.example.mangxahoi.DAO.PostDAO.PostDAOImpl;
-import com.example.mangxahoi.Model.Post;
+import com.example.mangxahoi.Entity.Post;
 
 import java.util.List;
 

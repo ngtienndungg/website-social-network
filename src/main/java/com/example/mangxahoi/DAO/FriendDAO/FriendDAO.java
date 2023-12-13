@@ -1,7 +1,7 @@
 package com.example.mangxahoi.DAO.FriendDAO;
 
-import com.example.mangxahoi.Model.Friend;
-import com.example.mangxahoi.Model.User;
+import com.example.mangxahoi.Entity.Friend;
+import com.example.mangxahoi.Entity.User;
 
 import java.util.List;
 

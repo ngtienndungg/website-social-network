@@ -2,7 +2,7 @@ package com.example.mangxahoi.Service.UserService;
 
 import com.example.mangxahoi.DAO.UserDAO.UserDAO;
 import com.example.mangxahoi.DAO.UserDAO.UserDAOImpl;
-import com.example.mangxahoi.Model.User;
+import com.example.mangxahoi.Entity.User;
 
 public class UserServiceImpl implements UserService {
     private final UserDAO userDAO = new UserDAOImpl();

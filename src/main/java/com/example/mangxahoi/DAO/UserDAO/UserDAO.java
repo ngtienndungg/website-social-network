@@ -1,6 +1,6 @@
 package com.example.mangxahoi.DAO.UserDAO;
 
-import com.example.mangxahoi.Model.User;
+import com.example.mangxahoi.Entity.User;
 
 public interface UserDAO {
     public User findUserByPhoneNumberAndPassword(String phoneNumber, String password);

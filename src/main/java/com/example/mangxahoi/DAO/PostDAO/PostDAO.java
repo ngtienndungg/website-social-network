@@ -1,6 +1,6 @@
 package com.example.mangxahoi.DAO.PostDAO;
 
-import com.example.mangxahoi.Model.Post;
+import com.example.mangxahoi.Entity.Post;
 
 import java.util.List;
 

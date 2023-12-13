@@ -1,6 +1,6 @@
 package com.example.mangxahoi.Controller;
 
-import com.example.mangxahoi.Model.User;
+import com.example.mangxahoi.Entity.User;
 import com.example.mangxahoi.Service.FriendService.FriendService;
 import com.example.mangxahoi.Service.FriendService.FriendServiceImpl;
 

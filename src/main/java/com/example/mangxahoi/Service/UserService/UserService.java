@@ -1,6 +1,6 @@
 package com.example.mangxahoi.Service.UserService;
 
-import com.example.mangxahoi.Model.User;
+import com.example.mangxahoi.Entity.User;
 
 public interface UserService {
     public User authenticateUser(String phoneNumber, String password);
