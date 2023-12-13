@@ -9,4 +9,5 @@ public interface FriendDAO {
     public void updateFriendStatus(int firstUserId, int secondUserId, String status);
     public void createFriend(int firstUserId, int secondUserId);
     public String getFriendStatus(int firstUserId, int secondUserId);
+    public void deleteFriend(int firstUserId, int secondUserId);
 }

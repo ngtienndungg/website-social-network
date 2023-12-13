@@ -28,4 +28,10 @@ public class FriendServiceImpl implements FriendService {
     public String getFriendStatus(int firstUserId, int secondUserId) {
         return friendDAO.getFriendStatus(firstUserId, secondUserId);
     }
+
+    @Override
+    public void rejectRequest(int firstUserId, int secondUserId) {
+        friendDAO.deleteFriend(firstUserId, secondUserId);
+    }
+
 }

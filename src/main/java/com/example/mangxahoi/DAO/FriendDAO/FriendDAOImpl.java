@@ -103,7 +103,7 @@ public class FriendDAOImpl implements FriendDAO {
     public String getFriendStatus(int firstUserId, int secondUserId) {
         EntityManager entityManager = JPAConfiguration.getEntityManager();
         try {
-            return entityManager.createQuery(
+            String status = entityManager.createQuery(
                             "SELECT f.status FROM Friend f " +
                                     "WHERE (f.firstUserId.userId = :firstUserId AND f.secondUserId.userId = :secondUserId) " +
                                     "OR (f.firstUserId.userId = :secondUserId AND f.secondUserId.userId = :firstUserId)",
@@ -112,6 +112,25 @@ public class FriendDAOImpl implements FriendDAO {
                     .setParameter("firstUserId", firstUserId)
                     .setParameter("secondUserId", secondUserId)
                     .getSingleResult();
+            if ("Pending".equals(status)) {
+                Friend friend = entityManager.createQuery(
+                                "SELECT f FROM Friend f " +
+                                        "WHERE (f.firstUserId.userId = :firstUserId AND f.secondUserId.userId = :secondUserId) " +
+                                        "OR (f.firstUserId.userId = :secondUserId AND f.secondUserId.userId = :firstUserId)",
+                                Friend.class
+                        )
+                        .setParameter("firstUserId", firstUserId)
+                        .setParameter("secondUserId", secondUserId)
+                        .getSingleResult();
+
+                if (friend.getFirstUserId().getUserId() == firstUserId) {
+                    return "RequestReceived";
+                } else {
+                    return "RequestSent";
+                }
+            }
+
+            return status != null ? status : "No relationship";
         } catch (NoResultException e) {
             return "No relationship";
         } finally {
@@ -119,4 +138,30 @@ public class FriendDAOImpl implements FriendDAO {
         }
     }
 
+
+    @Override
+    public void deleteFriend(int firstUserId, int secondUserId) {
+        EntityManager entityManager = JPAConfiguration.getEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            Friend friend = entityManager.createQuery(
+                            "SELECT f FROM Friend f WHERE (f.firstUserId.userId = :firstUserId AND f.secondUserId.userId = :secondUserId) " +
+                                    "OR (f.firstUserId.userId = :secondUserId AND f.secondUserId.userId = :firstUserId)",
+                            Friend.class
+                    )
+                    .setParameter("firstUserId", firstUserId)
+                    .setParameter("secondUserId", secondUserId)
+                    .getSingleResult();
+            entityManager.remove(friend);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            entityManager.close();
+        }
+    }
 }

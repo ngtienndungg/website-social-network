@@ -383,14 +383,16 @@
                                             </button>
                                         </form>
                                     </c:when>
-                                    <c:when test="${status == 'Pending' }">
+                                    <c:when test="${status == 'RequestReceived' }">
                                         <style>
                                             .profile-form {
                                                 margin-bottom: 20px;
                                             }
                                         </style>
 
-                                        <form id="acceptForm" class="profile-form" action="${pageContext.request.contextPath}/request-response" method="post">
+                                        <form id="acceptForm" class="profile-form"
+                                              action="${pageContext.request.contextPath}/request-response"
+                                              method="post">
                                             <input type="hidden" name="friendID" value="${profileId}">
                                             <input type="hidden" name="profile" value="profile">
                                             <button type="submit"
@@ -410,7 +412,9 @@
                                             }
                                         </style>
                                         <form id="rejectForm" class="profile-form" method="get"
-                                              action="${pageContext.request.contextPath}/profile/${userId}/updateprofile">
+                                              action="${pageContext.request.contextPath}/request-response">
+                                            <input type="hidden" name="friendID" value="${profileId}">
+                                            <input type="hidden" name="profile" value="profile">
                                             <button type="submit"
                                                     class="btn btn-primary btn-icon-text btn-edit-profile reject-button">
                                                 Từ chối
@@ -418,10 +422,48 @@
                                         </form>
                                     </c:when>
                                     <c:when test="${status == 'Friend' }">
-                                        <button type="submit"
-                                                class="btn btn-primary btn-icon-text btn-edit-profile">
-                                            Friend
-                                        </button>
+                                        <style>
+                                            .profile-form {
+                                                margin-bottom: 20px;
+                                            }
+                                        </style>
+                                            <input type="hidden" name="friendID" value="${profileId}" class="profile-form">
+                                            <input type="hidden" name="profile" value="profile">
+                                            <button type="submit"
+                                                    class="btn btn-primary btn-icon-text btn-edit-profile">
+                                                Hai bạn là bạn bè
+                                            </button>
+
+                                        <style>
+                                            .profile-form {
+                                                margin-bottom: 20px;
+                                            }
+
+                                            .reject-button {
+                                                background-color: red;
+                                                color: white; /* Để đảm bảo văn bản trên button có đủ độ tương phản */
+                                            }
+                                        </style>
+                                        <form id="rejectForm" class="profile-form" method="get"
+                                              action="${pageContext.request.contextPath}/request-response">
+                                            <input type="hidden" name="friendID" value="${profileId}">
+                                            <input type="hidden" name="profile" value="profile">
+                                            <button type="submit"
+                                                    class="btn btn-primary btn-icon-text btn-edit-profile reject-button">
+                                                Xoá bạn bè
+                                            </button>
+                                        </form>
+                                    </c:when>
+                                    <c:when test="${status == 'RequestSent' }">
+                                        <form id="rejectForm" class="profile-form" method="get"
+                                              action="${pageContext.request.contextPath}/request-response">
+                                            <input type="hidden" name="friendID" value="${profileId}">
+                                            <input type="hidden" name="profile" value="profile">
+                                            <button type="submit"
+                                                    class="btn btn-primary btn-icon-text btn-edit-profile reject-button">
+                                                Huỷ lời mời
+                                            </button>
+                                        </form>
                                     </c:when>
                                     <c:otherwise>
                                         <form id="addFriendForm" method="post"

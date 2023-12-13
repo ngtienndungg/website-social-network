@@ -87,6 +87,33 @@
             border-radius: 50%;
         }
 
+        .button-container {
+            display: flex; /* Sử dụng flexbox để các phần tử con nằm trong một hàng ngang */
+            gap: 20px; /* Đặt khoảng cách giữa các phần tử con là 20px */
+        }
+
+        .accept-btn {
+            /* Tùy chỉnh kiểu và màu sắc cho nút Chấp nhận nếu cần thiết */
+        }
+
+        .reject-btn {
+            background-color: red;
+            color: white;
+            /* Tùy chỉnh kiểu cho nút Reject nếu cần thiết */
+        }
+
+        .form-container {
+            display: flex;
+        }
+
+        .form-inline {
+            display: flex;
+        }
+
+        .form-gap {
+            width: 20px;
+        }
+
     </style>
 </head>
 <body>
@@ -112,13 +139,22 @@
                                 <h5><a href="#" class="profile-link">${request.fullName}</a></h5>
                             </div>
                             <div class="col-md-3 col-sm-3">
-                                <form action="request-response" method="post">
-                                    <input type="hidden" name="friendID" value="${request.userId}">
-                                    <button type="submit" class="btn btn-primary pull-right"
-                                            onclick="acceptFriend(this)">Chấp nhận
-                                    </button>
-                                </form>
+                                <div class="form-container">
+                                    <form action="request-response" method="post" class="form-inline m-0">
+                                        <button type="submit" class="btn btn-primary accept-btn" onclick="acceptFriend(this)">Chấp nhận</button>
+                                        <input type="hidden" name="friendID" value="${request.userId}">
+                                    </form>
+
+                                    <div class="form-gap"></div> <!-- Khoảng cách giữa hai form -->
+
+                                    <form action="${pageContext.request.contextPath}/request-response" method="post" class="form-inline m-0">
+                                        <input type="hidden" name="friendID" value="${request.userId}">
+                                        <button type="submit" class="btn btn-danger reject-btn" onclick="rejectFriend(this)">Từ chối</button>
+                                        <input type="hidden" name="friendID" value="${request.userId}">
+                                    </form>
+                                </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
