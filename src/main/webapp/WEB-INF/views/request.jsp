@@ -44,6 +44,41 @@
         header a.link-style {
             display: block; /* Đặt liên kết dưới dạng khối để chiếm toàn bộ width của mục */
         }
+        .container {
+            width: 100%; /* Đảm bảo rằng container chiếm toàn bộ chiều rộng của trang */
+        }
+
+        header {
+            background-color: #f0f0f0; /* Màu nền của header */
+            padding: 10px; /* Điều chỉnh phần đệm bên trong header để tạo khoảng trống xung quanh nội dung */
+        }
+
+        .horizontal-menu {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .horizontal-menu li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .link-style {
+            text-decoration: none;
+            color: #000;
+        }
+
+        /* Đảm bảo nội dung của header ngang chứ không phải dọc */
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Tùy chỉnh chiều cao của header (thay đổi giá trị theo nhu cầu của bạn) */
+        header {
+            height: 70px;
+        }
     </style>
 
 
@@ -119,10 +154,14 @@
 <body>
 <div class="container">
     <header>
-        <a href="${pageContext.request.contextPath}/home" class="link-style">Trang chủ</a>
-        <a href="${pageContext.request.contextPath}/friend-request" class="link-style">Yêu cầu kết bạn</a>
-        <a href="${pageContext.request.contextPath}/profile/${cookie.userId.value}" class="link-style">Trang cá nhân</a>
-        <a href="${pageContext.request.contextPath}/logout" class="link-style">Đăng xuất</a>
+        <nav>
+            <ul class="horizontal-menu">
+                <li><a href="${pageContext.request.contextPath}/home" class="link-style">Trang chủ</a></li>
+                <li><a href="${pageContext.request.contextPath}/friend-request" class="link-style">Yêu cầu kết bạn</a></li>
+                <li><a href="${pageContext.request.contextPath}/profile/${cookie.userId.value}" class="link-style">Trang cá nhân</a></li>
+                <li><a href="${pageContext.request.contextPath}/logout" class="link-style">Đăng xuất</a></li>
+            </ul>
+        </nav>
     </header>
     <c:set var="requests" value="<%= requests %>"/>
     <div class="row">

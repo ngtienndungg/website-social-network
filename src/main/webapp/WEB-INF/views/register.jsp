@@ -128,9 +128,7 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
             <p class="text-muted text-center mt-3 mb-0">Bạn đã có tài khoản? <a
                     href="${pageContext.request.contextPath}/login" class="text-primary ml-1">Đăng nhập ngay</a></p>
 

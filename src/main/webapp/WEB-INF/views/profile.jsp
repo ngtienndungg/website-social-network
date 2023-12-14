@@ -60,7 +60,7 @@
             color: #fff; /* Màu chữ */
             justify-content: space-around; /* Chia đều khoảng cách giữa các mục */
             align-items: center; /* Căn giữa theo chiều dọc */
-            height: 220px; /* Độ cao của thanh navigation bar */
+            height: 100px; /* Độ cao của thanh navigation bar */
         }
 
         header a, header button {
@@ -74,6 +74,42 @@
 
         header a.link-style {
             display: block; /* Đặt liên kết dưới dạng khối để chiếm toàn bộ width của mục */
+        }
+
+        .container {
+            width: 100%; /* Đảm bảo rằng container chiếm toàn bộ chiều rộng của trang */
+        }
+
+        header {
+            background-color: #f0f0f0; /* Màu nền của header */
+            padding: 10px; /* Điều chỉnh phần đệm bên trong header để tạo khoảng trống xung quanh nội dung */
+        }
+
+        .horizontal-menu {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .horizontal-menu li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .link-style {
+            text-decoration: none;
+            color: #000;
+        }
+
+        /* Đảm bảo nội dung của header ngang chứ không phải dọc */
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Tùy chỉnh chiều cao của header (thay đổi giá trị theo nhu cầu của bạn) */
+        header {
+            height: 70px;
         }
     </style>
     <title>social network user profile example - Bootdey.com</title>
@@ -427,18 +463,65 @@
             fill: red; /* Đổi màu hình trái tim khi nút đã được like */
         }
 
+        label {
+            display: block;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button.secondary {
+            background-color: #6c757d;
+        }
+
+
+        #postDialog1 {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+            z-index: 1000;
+            height: 480px; /* Điều chỉnh chiều cao tại đây */
+        }
 
     </style>
 </head>
 <body>
 <div class="container">
     <header>
-        <a href="#" class="link-style">Trang chủ</a>
-        <a href="${pageContext.request.contextPath}/friend-request" class="link-style">Yêu cầu kết bạn</a>
-        <a href="${pageContext.request.contextPath}/profile/${cookie.userId.value}" class="link-style">Trang cá nhân</a>
-        <a href="${pageContext.request.contextPath}/logout" class="link-style">Đăng xuất</a>
+        <nav>
+            <ul class="horizontal-menu">
+                <li><a href="${pageContext.request.contextPath}/home" class="link-style">Trang chủ</a></li>
+                <li><a href="${pageContext.request.contextPath}/friend-request" class="link-style">Yêu cầu kết bạn</a></li>
+                <li><a href="${pageContext.request.contextPath}/profile/${cookie.userId.value}" class="link-style">Trang cá nhân</a></li>
+                <li><a href="${pageContext.request.contextPath}/logout" class="link-style">Đăng xuất</a></li>
+            </ul>
+        </nav>
     </header>
-
     <div class="profile-page tx-13">
         <div class="row">
             <div class="col-12 grid-margin">
@@ -460,16 +543,12 @@
                             <div class="d-none d-md-block">
                                 <c:choose>
                                     <c:when test="${userId == profileId}">
-                                        <form id="updateProfileForm" method="get"
+                                        <form id="updateProfileForm" method="post"
                                               action="${pageContext.request.contextPath}/profile/${userId}/updateprofile">
-                                            <button type="submit"
-                                                    class="btn btn-primary btn-icon-text btn-edit-profile">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24"
-                                                     fill="none" stroke="currentColor" stroke-width="2"
-                                                     stroke-linecap="round"
-                                                     stroke-linejoin="round"
-                                                     class="feather feather-edit btn-icon-prepend">
+                                            <button type="submit" class="btn btn-primary btn-icon-text btn-edit-profile" id="editProfileButton">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                     stroke-linejoin="round" class="feather feather-edit btn-icon-prepend">
                                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                                                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                                                 </svg>
@@ -884,6 +963,31 @@
     </form>
 </div>
 
+<div id="postDialog1">
+    <span class="closeButton" onclick="closeEditDialog()">&times;</span>
+    <form id="editForm" action="<%= request.getContextPath() %>/updateprofile" method="post">
+        <input type="hidden" id="baseUrl" value="<%= request.getContextPath() %>">
+
+        <label for="fullName">Full Name:</label>
+        <input type="text" id="fullName" name="fullName" value="<%= user.getFullName() %>">
+
+        <label for="biography">Biography:</label>
+        <textarea id="biography" name="biography"><%= user.getBiography() %></textarea>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="<%= user.getEmail() %>">
+
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender">
+            <option value="true" <%= user.getGender() ? "selected" : "" %>>Nam</option>
+            <option value="false" <%= !user.getGender() ? "selected" : "" %>>Nữ</option>
+        </select>
+        <div>
+            <button type="submit">Lưu lại thay đổi</button>
+        </div>
+    </form>
+</div>
+
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
@@ -943,5 +1047,23 @@
     }
 
 </script>
+<script>
+    document.getElementById('editProfileButton').addEventListener('click', function(event) {
+        event.preventDefault();
+        openEditDialog();
+    });
+
+    function openEditDialog() {
+        document.getElementById('postDialog1').style.display = 'block';
+        // Các bước khác để chuẩn bị dialog khi cần
+    }
+
+    function closeEditDialog() {
+        document.getElementById('postDialog1').style.display = 'none';
+        // Các bước khác để đóng dialog khi cần
+    }
+
+</script>
+
 </body>
 </html>
