@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,6 +24,7 @@ public class ProfileController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String pathInfo = req.getPathInfo();
+        req.setCharacterEncoding("UTF-8");
         System.out.println(pathInfo);
         UserService userService = new UserServiceImpl();
         PostService postService = new PostServiceImpl();
@@ -34,6 +36,7 @@ public class ProfileController extends HttpServlet {
                     RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/profile.jsp");
                     User user = userService.getUserById(Integer.parseInt(userId));
                     List<Post> post = postService.getPostByUserId(Integer.parseInt(userId));
+                    post.sort(new PostComparator());
                     Logger.getLogger(ProfileController.class.getName()).log(Level.INFO, String.valueOf(post.size()));
                     req.setAttribute("pathInfo", userId);
                     System.out.println(userId);
@@ -60,4 +63,11 @@ public class ProfileController extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/errorPage.jsp");
         }
     }
+    public static class PostComparator implements Comparator<Post> {
+        @Override
+        public int compare(Post post1, Post post2) {
+            return post2.getTimestamp().compareTo(post1.getTimestamp());
+        }
+    }
 }
+

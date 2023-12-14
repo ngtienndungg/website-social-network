@@ -4,6 +4,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="com.example.mangxahoi.Service.FriendService.FriendService" %>
 <%@ page import="com.example.mangxahoi.Service.FriendService.FriendServiceImpl" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -14,9 +15,11 @@
     } else {
         posts = new ArrayList<>();
     }
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
 %>
 
 <c:set var="userId" value=""/>
+<c:set var="formatter" value="<%= formatter %>"/>
 
 <%
     int currentUserId = 0;
@@ -346,7 +349,7 @@
             border-radius: 10px;
             text-align: center;
             z-index: 1000;
-            height: 500px; /* Điều chỉnh chiều cao tại đây */
+            height: 600px; /* Điều chỉnh chiều cao tại đây */
         }
 
         #postDialog textarea {
@@ -749,6 +752,7 @@
                                                      src="https://bootdey.com/img/Content/avatar/avatar6.png" alt>
                                                 <div class="ml-2">
                                                     <p>${userName}</p>
+                                                    <p>${post.timestamp.format(formatter)}</p>
                                                 </div>
                                             </div>
                                             <div class="dropdown">
@@ -869,13 +873,15 @@
 </div>
 <div id="postDialog">
     <span class="closeButton" onclick="closePostDialog()">&times;</span>
-    <textarea id="postContent" placeholder="Nhập nội dung bài viết"></textarea>
-    <div id="imageFrame">
-        <img id="imagePreview" alt="Image Preview">
-    </div>
-    <button id="addImageButton" onclick="openImageInput()">Thêm ảnh</button>
-    <input type="file" id="imageInput" onchange="previewImage()">
-    <button id="postButton" onclick="closePostDialog()">Đăng</button>
+    <form action="${pageContext.request.contextPath}/upload-post" method="post" accept-charset="UTF-8">
+        <textarea name="postContent" placeholder="Nhập nội dung bài viết"></textarea>
+        <div id="imageFrame">
+            <img id="imagePreview" alt="Image Preview">
+        </div>
+        <button id="addImageButton" onclick="openImageInput()">Thêm ảnh</button>
+        <input type="file" name="imageInput" onchange="previewImage()">
+        <button type="submit" id="postButton">Đăng</button>
+    </form>
 </div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>

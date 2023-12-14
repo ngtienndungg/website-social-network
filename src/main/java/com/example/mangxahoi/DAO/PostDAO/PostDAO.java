@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface PostDAO {
     List<Post> findPostByUserId(int userId);
+    void createPost(int userId, String content, String image);
 }

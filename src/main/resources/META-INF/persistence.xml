@@ -6,6 +6,11 @@
         <class>com.example.mangxahoi.Entity.Like</class>
         <class>com.example.mangxahoi.Entity.Post</class>
         <class>com.example.mangxahoi.Entity.User</class>
+        <class>test.CommentsEntity</class>
+        <class>test.FriendsEntity</class>
+        <class>test.LikesEntity</class>
+        <class>test.PostsEntity</class>
+        <class>test.UsersEntity</class>
         <properties>
             <property name="toplink.jdbc.url" value="jdbc:sqlserver://localhost:1433;database=MangXaHoi"/>
             <property name="toplink.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>

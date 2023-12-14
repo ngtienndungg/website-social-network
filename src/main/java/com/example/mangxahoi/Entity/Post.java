@@ -1,7 +1,7 @@
 package com.example.mangxahoi.Entity;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Posts", schema = "dbo", catalog = "MangXaHoi")
@@ -21,7 +21,7 @@ public class Post {
     private String image;
     @Basic
     @Column(name = "Timestamp", nullable = false)
-    private Date timestamp;
+    private LocalDateTime timestamp;
 
     public int getPostId() {
         return postId;
@@ -55,11 +55,11 @@ public class Post {
         this.image = image;
     }
 
-    public Date getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 

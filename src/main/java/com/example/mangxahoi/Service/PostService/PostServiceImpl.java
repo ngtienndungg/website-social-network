@@ -13,4 +13,9 @@ public class PostServiceImpl implements PostService {
     public List<Post> getPostByUserId(int userId) {
         return postDAO.findPostByUserId(userId);
     }
+
+    @Override
+    public void uploadPost(int userId, String content, String image) {
+        postDAO.createPost(userId, content, image);
+    }
 }
