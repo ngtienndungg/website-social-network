@@ -58,8 +58,38 @@
             list-style-type: none;
             margin: 0;
             padding: 0;
+            display: flex; /* Hiển thị các phần tử trong menu theo chiều ngang */
         }
 
+        .horizontal-menu li {
+            margin-right: 10px;
+        }
+
+        .search-bar {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            align-items: center;
+            width: 400px;
+            padding: 5px;
+            margin-right: 5px;
+        }
+
+        .search-button {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .search-button:hover {
+            background-color: #45a049;
+        }
         .horizontal-menu li {
             display: inline-block;
             margin-right: 10px;
@@ -158,11 +188,13 @@
         <nav>
             <ul class="horizontal-menu">
                 <li><a href="${pageContext.request.contextPath}/home" class="link-style">Trang chủ</a></li>
-                <li><a href="${pageContext.request.contextPath}/friend-request" class="link-style">Yêu cầu kết bạn</a>
-                </li>
-                <li><a href="${pageContext.request.contextPath}/profile/${cookie.userId.value}" class="link-style">Trang
-                    cá nhân</a></li>
+                <li><a href="${pageContext.request.contextPath}/friend-request" class="link-style">Yêu cầu kết bạn</a></li>
+                <li><a href="${pageContext.request.contextPath}/profile/${cookie.userId.value}" class="link-style">Trang cá nhân</a></li>
                 <li><a href="${pageContext.request.contextPath}/logout" class="link-style">Đăng xuất</a></li>
+                <div class="search-bar">
+                    <input type="text" placeholder="Tìm kiếm..." class="search-input">
+                    <button class="search-button">Tìm kiếm</button>
+                </div>
             </ul>
         </nav>
     </header>

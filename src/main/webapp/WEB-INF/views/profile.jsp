@@ -144,16 +144,6 @@
             color: #000;
         }
 
-        .link-style {
-            text-decoration: none;
-            color: #000;
-        }
-
-        .link-style {
-            text-decoration: none;
-            color: #000;
-        }
-
         /* Đảm bảo nội dung của header ngang chứ không phải dọc */
         nav {
             display: flex;
