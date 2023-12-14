@@ -552,6 +552,19 @@
             height: 480px; /* Điều chỉnh chiều cao tại đây */
         }
 
+        .like-button {
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .like-button.active {
+            color: red;
+        }
+
+        .like-button.active svg path {
+            fill: red;
+        }
     </style>
 </head>
 <body>
@@ -963,7 +976,7 @@
                                     <div class="card-footer">
                                         <div class="d-flex post-actions">
                                             <a href="javascript:;" class="d-flex align-items-center text-muted mr-4">
-                                                <div id="likeButton" onclick="toggleLike()">
+                                                <div id="likeButton" onclick="toggleLike(this)">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                          viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -1134,7 +1147,13 @@
         // Các bước khác để đóng dialog khi cần
     }
 
+    function toggleLike(likeButton) {
+        likeButton.classList.toggle('active');
+    }
+
 </script>
+
+
 
 </body>
 </html>
