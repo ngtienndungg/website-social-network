@@ -381,9 +381,9 @@
             right: 10px;
             cursor: pointer;
             font-size: 20px;
-            color: #999999; để tạo khoảng cách giữa nút "Thêm ảnh" và nút "Đăng" */
+            color: #999999;
         }
-        }
+
 
         #imageInput {
             display: none;
@@ -458,8 +458,10 @@
                             <div class="card-header">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center">
-                                        <img class="img-xs rounded-circle"
-                                             src="https://bootdey.com/img/Content/avatar/avatar6.png" alt>
+                                        <a href="${pageContext.request.contextPath}/profile/${post.userId.userId}">
+                                            <img class="img-xs rounded-circle"
+                                                 src="https://bootdey.com/img/Content/avatar/avatar6.png" alt>
+                                        </a>
                                         <div class="ml-2">
                                             <p>${post.userId.fullName}</p>
                                             <p>${post.timestamp.format(formatter)}</p>

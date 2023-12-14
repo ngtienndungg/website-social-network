@@ -44,6 +44,7 @@
         header a.link-style {
             display: block; /* Đặt liên kết dưới dạng khối để chiếm toàn bộ width của mục */
         }
+
         .container {
             width: 100%; /* Đảm bảo rằng container chiếm toàn bộ chiều rộng của trang */
         }
@@ -157,8 +158,10 @@
         <nav>
             <ul class="horizontal-menu">
                 <li><a href="${pageContext.request.contextPath}/home" class="link-style">Trang chủ</a></li>
-                <li><a href="${pageContext.request.contextPath}/friend-request" class="link-style">Yêu cầu kết bạn</a></li>
-                <li><a href="${pageContext.request.contextPath}/profile/${cookie.userId.value}" class="link-style">Trang cá nhân</a></li>
+                <li><a href="${pageContext.request.contextPath}/friend-request" class="link-style">Yêu cầu kết bạn</a>
+                </li>
+                <li><a href="${pageContext.request.contextPath}/profile/${cookie.userId.value}" class="link-style">Trang
+                    cá nhân</a></li>
                 <li><a href="${pageContext.request.contextPath}/logout" class="link-style">Đăng xuất</a></li>
             </ul>
         </nav>
@@ -171,24 +174,31 @@
                     <div class="nearby-user">
                         <div class="row">
                             <div class="col-md-2 col-sm-2">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="user"
-                                     class="profile-photo-lg">
+                                <a href="${pageContext.request.contextPath}/profile/${request.userId}">
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="user"
+                                         class="profile-photo-lg">
+                                </a>
                             </div>
                             <div class="col-md-7 col-sm-7">
-                                <h5><a href="#" class="profile-link">${request.fullName}</a></h5>
+                                <h5><a href="${pageContext.request.contextPath}/profile/${request.userId}" class="profile-link">${request.fullName}</a></h5>
                             </div>
                             <div class="col-md-3 col-sm-3">
                                 <div class="form-container">
                                     <form action="request-response" method="post" class="form-inline m-0">
-                                        <button type="submit" class="btn btn-primary accept-btn" onclick="acceptFriend(this)">Chấp nhận</button>
+                                        <button type="submit" class="btn btn-primary accept-btn"
+                                                onclick="acceptFriend(this)">Chấp nhận
+                                        </button>
                                         <input type="hidden" name="friendID" value="${request.userId}">
                                     </form>
 
                                     <div class="form-gap"></div> <!-- Khoảng cách giữa hai form -->
 
-                                    <form action="${pageContext.request.contextPath}/request-response" method="post" class="form-inline m-0">
+                                    <form action="${pageContext.request.contextPath}/request-response" method="post"
+                                          class="form-inline m-0">
                                         <input type="hidden" name="friendID" value="${request.userId}">
-                                        <button type="submit" class="btn btn-danger reject-btn" onclick="rejectFriend(this)">Từ chối</button>
+                                        <button type="submit" class="btn btn-danger reject-btn"
+                                                onclick="rejectFriend(this)">Từ chối
+                                        </button>
                                         <input type="hidden" name="friendID" value="${request.userId}">
                                     </form>
                                 </div>
