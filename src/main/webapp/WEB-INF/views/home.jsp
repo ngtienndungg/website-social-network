@@ -471,8 +471,10 @@
                 <li><a href="${pageContext.request.contextPath}/profile/${cookie.userId.value}" class="link-style">Trang cá nhân</a></li>
                 <li><a href="${pageContext.request.contextPath}/logout" class="link-style">Đăng xuất</a></li>
                 <div class="search-bar">
-                    <input type="text" placeholder="Tìm kiếm..." class="search-input">
-                    <button class="search-button">Tìm kiếm</button>
+                    <form action="${pageContext.request.contextPath}/search" method="get">
+                        <input type="text" name="name" placeholder="Tìm kiếm..." class="search-input">
+                        <button type="submit" class="search-button">Tìm kiếm</button>
+                    </form>
                 </div>
             </ul>
         </nav>

@@ -1,12 +1,13 @@
 package com.example.mangxahoi.DAO.UserDAO;
 
-import com.example.mangxahoi.JPAManager.JPAConfiguration;
 import com.example.mangxahoi.Entity.User;
+import com.example.mangxahoi.JPAManager.JPAConfiguration;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 public class UserDAOImpl implements UserDAO {
     @Override
@@ -78,8 +79,6 @@ public class UserDAOImpl implements UserDAO {
 
         try {
             transaction.begin();
-
-            // Retrieve the user by userId
             User userToUpdate = entityManager.find(User.class, userId);
 
             if (userToUpdate != null) {
@@ -100,6 +99,26 @@ public class UserDAOImpl implements UserDAO {
             }
             e.printStackTrace();
             throw e;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<User> findUserByName(String name) {
+        EntityManager entityManager = JPAConfiguration.getEntityManager();
+        try {
+            TypedQuery<User> query = entityManager.createQuery(
+                    "SELECT u FROM User u WHERE LOWER(u.fullName) LIKE LOWER(:name)",
+                    User.class
+            );
+            query.setParameter("name", "%" + name + "%");
+            List<User> resultList = query.getResultList();
+            if (!resultList.isEmpty()) {
+                return resultList;
+            } else {
+                return null;
+            }
         } finally {
             entityManager.close();
         }

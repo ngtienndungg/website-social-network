@@ -4,11 +4,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    ArrayList<User> requests;
-    if (request.getAttribute("requestList") != null) {
-        requests = (ArrayList<User>) request.getAttribute("requestList");
+    ArrayList<User> result;
+    if (request.getAttribute("result") != null) {
+        result = (ArrayList<User>) request.getAttribute("result");
     } else {
-        requests = new ArrayList<>();
+        result = new ArrayList<>();
     }
 %>
 
@@ -122,6 +122,10 @@
             background: #FAFAFA;
         }
 
+        /*==================================================
+          Nearby People CSS
+          ==================================================*/
+
         .people-nearby .google-maps {
             background: #f8f8f8;
             border-radius: 4px;
@@ -196,41 +200,21 @@
             </ul>
         </nav>
     </header>
-    <c:set var="requests" value="<%= requests %>"/>
+    <c:set var="results" value="<%= result %>"/>
     <div class="row">
-        <c:forEach var="request" items="${requests}">
+        <c:forEach var="result" items="${results}">
             <div class="col-md-8">
                 <div class="people-nearby">
                     <div class="nearby-user">
                         <div class="row">
                             <div class="col-md-2 col-sm-2">
-                                <a href="${pageContext.request.contextPath}/profile/${request.userId}">
+                                <a href="${pageContext.request.contextPath}/profile/${result.userId}">
                                     <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="user"
                                          class="profile-photo-lg">
                                 </a>
                             </div>
                             <div class="col-md-7 col-sm-7">
-                                <h5><a href="${pageContext.request.contextPath}/profile/${request.userId}" class="profile-link">${request.fullName}</a></h5>
-                            </div>
-                            <div class="col-md-3 col-sm-3">
-                                <div class="form-container">
-                                    <form action="request-response" method="post" class="form-inline m-0">
-                                        <button type="submit" class="btn btn-primary accept-btn"
-                                                onclick="acceptFriend(this)">Chấp nhận
-                                        </button>
-                                        <input type="hidden" name="friendID" value="${request.userId}">
-                                    </form>
-
-                                    <div class="form-gap"></div>
-                                    <form action="${pageContext.request.contextPath}/request-response" method="post"
-                                          class="form-inline m-0">
-                                        <input type="hidden" name="friendID" value="${request.userId}">
-                                        <button type="submit" class="btn btn-danger reject-btn"
-                                                onclick="rejectFriend(this)">Từ chối
-                                        </button>
-                                        <input type="hidden" name="friendID" value="${request.userId}">
-                                    </form>
-                                </div>
+                                <h5><a href="${pageContext.request.contextPath}/profile/${result.userId}" class="profile-link">${result.fullName}</a></h5>
                             </div>
                         </div>
                     </div>

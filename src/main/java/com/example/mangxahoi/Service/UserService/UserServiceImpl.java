@@ -4,6 +4,8 @@ import com.example.mangxahoi.DAO.UserDAO.UserDAO;
 import com.example.mangxahoi.DAO.UserDAO.UserDAOImpl;
 import com.example.mangxahoi.Entity.User;
 
+import java.util.List;
+
 public class UserServiceImpl implements UserService {
     private final UserDAO userDAO = new UserDAOImpl();
 
@@ -25,5 +27,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(int userId, String fullName, String email, String biography, boolean gender) {
         return userDAO.updateUserInformation(userId, fullName, email, biography, gender);
+    }
+
+    @Override
+    public List<User> getUserByName(String name) {
+        return userDAO.findUserByName(name);
     }
 }
