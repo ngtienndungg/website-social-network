@@ -1,6 +1,5 @@
 package com.example.mangxahoi.Controller;
 
-import com.example.mangxahoi.Entity.Post;
 import com.example.mangxahoi.Entity.User;
 import com.example.mangxahoi.Service.FriendService.FriendService;
 import com.example.mangxahoi.Service.FriendService.FriendServiceImpl;
@@ -8,6 +7,7 @@ import com.example.mangxahoi.Service.PostService.PostService;
 import com.example.mangxahoi.Service.PostService.PostServiceImpl;
 import com.example.mangxahoi.Service.UserService.UserService;
 import com.example.mangxahoi.Service.UserService.UserServiceImpl;
+import com.example.mangxahoi.SupportModel.PostSupportModel;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -37,7 +37,7 @@ public class ProfileController extends HttpServlet {
                     String userId = pathInfo.substring(1);
                     RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/profile.jsp");
                     User user = userService.getUserById(Integer.parseInt(userId));
-                    List<Post> post = postService.getPostByUserId(Integer.parseInt(userId));
+                    List<PostSupportModel> post = postService.getPostByUserId(Integer.parseInt(userId));
                     post.sort(new PostComparator());
                     Logger.getLogger(ProfileController.class.getName()).log(Level.INFO, String.valueOf(post.size()));
                     req.setAttribute("pathInfo", userId);
@@ -45,7 +45,7 @@ public class ProfileController extends HttpServlet {
                     FriendService friendService = new FriendServiceImpl();
                     List<User> friends = friendService.getFriendList(Integer.parseInt(userId));
                     req.setAttribute("friends", friends);
-                    req.setAttribute("post", post);
+                    req.setAttribute("posts", post);
                     req.setAttribute("user", user);
                     dispatcher.forward(req, resp);
                 } catch (NumberFormatException e) {
@@ -68,10 +68,10 @@ public class ProfileController extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/errorPage.jsp");
         }
     }
-    public static class PostComparator implements Comparator<Post> {
+    public static class PostComparator implements Comparator<PostSupportModel> {
         @Override
-        public int compare(Post post1, Post post2) {
-            return post2.getTimestamp().compareTo(post1.getTimestamp());
+        public int compare(PostSupportModel post1, PostSupportModel post2) {
+            return post2.getPost().getTimestamp().compareTo(post1.getPost().getTimestamp());
         }
     }
 }

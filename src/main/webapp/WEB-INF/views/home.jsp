@@ -533,7 +533,7 @@
                             <div class="card-header">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center">
-                                        <a href="${pageContext.request.contextPath}/profile/${post.post.userId}">
+                                        <a href="${pageContext.request.contextPath}/profile/${post.post.userId.userId}">
                                             <img class="img-xs rounded-circle"
                                                  src="https://bootdey.com/img/Content/avatar/avatar6.png" alt>
                                         </a>

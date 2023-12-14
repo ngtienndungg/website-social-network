@@ -12,7 +12,7 @@ public class PostServiceImpl implements PostService {
     PostDAO postDAO = new PostDAOImpl();
 
     @Override
-    public List<Post> getPostByUserId(int userId) {
+    public List<PostSupportModel> getPostByUserId(int userId) {
         return postDAO.findPostByUserId(userId);
     }
 

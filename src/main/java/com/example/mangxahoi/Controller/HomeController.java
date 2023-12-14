@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 
 @WebServlet("/home")
@@ -28,8 +29,16 @@ public class HomeController extends HttpServlet {
 
         PostService postService = new PostServiceImpl();
         List<PostSupportModel> postsWithLikeCount = postService.getPostOfFriends(userId);
+        postsWithLikeCount.sort(new PostComparator());
         req.setAttribute("posts", postsWithLikeCount);
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/home.jsp");
         dispatcher.forward(req, resp);
     }
+    public static class PostComparator implements Comparator<PostSupportModel> {
+        @Override
+        public int compare(PostSupportModel post1, PostSupportModel post2) {
+            return post2.getPost().getTimestamp().compareTo(post1.getPost().getTimestamp());
+        }
+    }
+
 }

@@ -4,18 +4,20 @@ import com.example.mangxahoi.Entity.Like;
 import com.example.mangxahoi.Entity.Post;
 import com.example.mangxahoi.Entity.User;
 import com.example.mangxahoi.JPAManager.JPAConfiguration;
+import com.example.mangxahoi.SupportModel.PostSupportModel;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class PostDAOImpl implements PostDAO {
     @Override
-    public List<Post> findPostByUserId(int userId) {
+    public List<PostSupportModel> findPostByUserId(int userId) {
         try {
             EntityManager entityManager = JPAConfiguration.getEntityManager();
             TypedQuery<Post> query = entityManager.createQuery(
@@ -23,11 +25,19 @@ public class PostDAOImpl implements PostDAO {
                     Post.class
             );
             query.setParameter("id", userId);
-            return query.getResultList();
+            List<Post> posts = query.getResultList();
+
+            List<PostSupportModel> postSupportModels = new ArrayList<>();
+            for (Post post : posts) {
+                long likeCount = countLikesForPost(post.getPostId());
+                postSupportModels.add(new PostSupportModel(post, likeCount));
+            }
+            return postSupportModels;
         } catch (NoResultException e) {
-            return null;
+            return Collections.emptyList(); // Return an empty list if no results found
         }
     }
+
 
     @Override
     public void createPost(int userId, String content, String image) {

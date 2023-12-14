@@ -6,6 +6,7 @@
 <%@ page import="com.example.mangxahoi.Service.FriendService.FriendServiceImpl" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="com.example.mangxahoi.Entity.Friend" %>
+<%@ page import="com.example.mangxahoi.SupportModel.PostSupportModel" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -14,9 +15,9 @@
         user = (User) request.getAttribute("user");
     }
 
-    ArrayList<Post> posts;
-    if (request.getAttribute("post") != null) {
-        posts = (ArrayList<Post>) request.getAttribute("post");
+    ArrayList<PostSupportModel> posts;
+    if (request.getAttribute("posts") != null) {
+        posts = (ArrayList<PostSupportModel>) request.getAttribute("posts");
     } else {
         posts = new ArrayList<>();
     }
@@ -149,7 +150,7 @@
             display: flex;
             align-items: center;
         }
-        
+
         header {
             height: 70px;
         }
@@ -573,8 +574,10 @@
         <nav>
             <ul class="horizontal-menu">
                 <li><a href="${pageContext.request.contextPath}/home" class="link-style">Trang chủ</a></li>
-                <li><a href="${pageContext.request.contextPath}/friend-request" class="link-style">Yêu cầu kết bạn</a></li>
-                <li><a href="${pageContext.request.contextPath}/profile/${cookie.userId.value}" class="link-style">Trang cá nhân</a></li>
+                <li><a href="${pageContext.request.contextPath}/friend-request" class="link-style">Yêu cầu kết bạn</a>
+                </li>
+                <li><a href="${pageContext.request.contextPath}/profile/${cookie.userId.value}" class="link-style">Trang
+                    cá nhân</a></li>
                 <li><a href="${pageContext.request.contextPath}/logout" class="link-style">Đăng xuất</a></li>
                 <div class="search-bar">
                     <form action="${pageContext.request.contextPath}/search" method="get">
@@ -901,7 +904,7 @@
                                                      src="https://bootdey.com/img/Content/avatar/avatar6.png" alt>
                                                 <div class="ml-2">
                                                     <p>${userName}</p>
-                                                    <p>${post.timestamp.format(formatter)}</p>
+                                                    <p>${post.post.timestamp.format(formatter)}</p>
                                                 </div>
                                             </div>
                                             <div class="dropdown">
@@ -970,13 +973,14 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <p class="mb-3 tx-14">${post.content}</p>
+                                        <p class="mb-3 tx-14">${post.post.content}</p>
                                         <img class="img-fluid" src="../../../assets/images/sample2.jpg" alt>
                                     </div>
                                     <div class="card-footer">
                                         <div class="d-flex post-actions">
                                             <a href="javascript:;" class="d-flex align-items-center text-muted mr-4">
-                                                <div id="likeButton" onclick="toggleLike(this)">
+                                                <div id="likeButton" onclick="toggleLike(this, ${post.post.postId})"
+                                                     data-post-id="${post.post.postId}">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                          viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -984,6 +988,7 @@
                                                         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                                                     </svg>
                                                     <p class="d-none d-md-block ml-2">Like</p>
+                                                    <p class="like-count">(${post.likeCount})</p>
                                                 </div>
 
                                             </a>
@@ -1019,8 +1024,10 @@
                     <c:otherwise>
                         <c:forEach var="friend" items="${friends}">
                             <div class="d-flex align-items-center">
-                                <img class="img-xs rounded-circle"
-                                     src="https://bootdey.com/img/Content/avatar/avatar6.png" alt>
+                                <a href="${pageContext.request.contextPath}/profile/${friend.userId}">
+                                    <img class="img-xs rounded-circle"
+                                         src="https://bootdey.com/img/Content/avatar/avatar6.png" alt>
+                                </a>
                                 <div class="ml-2">
                                     <p>${friend.fullName}</p>
                                 </div>
@@ -1149,15 +1156,17 @@
         // Các bước khác để đóng dialog khi cần
     }
 
-    function toggleLike(likeButton) {
-        likeButton.classList.toggle('active'); fetch('/action-like', {
-            method: 'POST', // or 'GET' depending on your servlet configuration
+    function toggleLike(likeButton, postId) {
+        likeButton.classList.toggle('active');
+
+        fetch('${pageContext.request.contextPath}/action-like', {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            // You can pass additional data to the servlet if needed
             body: JSON.stringify({
-                // Add any data you want to send to the servlet here
+                action: 'like',
+                postId: postId,
             }),
         })
             .then(response => {
@@ -1169,15 +1178,20 @@
             .then(data => {
                 // Handle the response from the servlet if needed
                 console.log(data);
+
+                // Assuming the response includes the updated like count
+                const updatedLikeCount = data.updatedLikeCount;
+
+                // Update the like count in the HTML
+                const postContainer = likeButton.closest('.post-container');
+                const likeCountElement = postContainer.querySelector('.like-count');
+                likeCountElement.textContent = updatedLikeCount;
             })
             .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);
             });
-
     }
+
 </script>
-
-
-
 </body>
 </html>
