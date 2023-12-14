@@ -9,6 +9,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 public class PostDAOImpl implements PostDAO {
@@ -52,4 +53,36 @@ public class PostDAOImpl implements PostDAO {
             entityManager.close();
         }
     }
+
+    @Override
+    public List<Post> findPostsOfFriends(int userId) {
+        EntityManager entityManager = JPAConfiguration.getEntityManager();
+        try {
+            List<Integer> friendIds = entityManager.createQuery(
+                            "SELECT CASE " +
+                                    "   WHEN f.firstUserId.userId = :userId THEN f.secondUserId.userId " +
+                                    "   WHEN f.secondUserId.userId = :userId THEN f.firstUserId.userId " +
+                                    "END " +
+                                    "FROM Friend f " +
+                                    "WHERE (f.firstUserId.userId = :userId OR f.secondUserId.userId = :userId) " +
+                                    "AND f.status = 'Friend'",
+                            Integer.class
+                    )
+                    .setParameter("userId", userId)
+                    .getResultList();
+            if (!friendIds.isEmpty()) {
+                return entityManager.createQuery(
+                                "SELECT p FROM Post p WHERE p.userId.userId IN :friendIds",
+                                Post.class
+                        )
+                        .setParameter("friendIds", friendIds)
+                        .getResultList();
+            } else {
+                return Collections.emptyList();
+            }
+        } finally {
+            entityManager.close();
+        }
+    }
+
 }

@@ -18,4 +18,9 @@ public class PostServiceImpl implements PostService {
     public void uploadPost(int userId, String content, String image) {
         postDAO.createPost(userId, content, image);
     }
+
+    @Override
+    public List<Post> getPostOfFriends(int userId) {
+        return postDAO.findPostsOfFriends(userId);
+    }
 }

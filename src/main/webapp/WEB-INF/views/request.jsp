@@ -119,7 +119,7 @@
 <body>
 <div class="container">
     <header>
-        <a href="#" class="link-style">Trang chủ</a>
+        <a href="${pageContext.request.contextPath}/home" class="link-style">Trang chủ</a>
         <a href="${pageContext.request.contextPath}/friend-request" class="link-style">Yêu cầu kết bạn</a>
         <a href="${pageContext.request.contextPath}/profile/${cookie.userId.value}" class="link-style">Trang cá nhân</a>
         <a href="${pageContext.request.contextPath}/logout" class="link-style">Đăng xuất</a>
