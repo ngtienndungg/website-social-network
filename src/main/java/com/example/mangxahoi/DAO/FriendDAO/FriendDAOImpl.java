@@ -25,9 +25,6 @@ public class FriendDAOImpl implements FriendDAO {
             query.setParameter("userId", userId);
             @SuppressWarnings("unchecked")
             List<User> users = query.getResultList();
-            for (User user : users) {
-                System.out.println(user.getFullName());
-            }
             return users;
         } finally {
             entityManager.close();
@@ -160,6 +157,37 @@ public class FriendDAOImpl implements FriendDAO {
                 transaction.rollback();
             }
             e.printStackTrace();
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<User> findFriendByUserId(int userId) {
+        EntityManager entityManager = JPAConfiguration.getEntityManager();
+        try {
+            Query query = entityManager.createNativeQuery(
+                    "SELECT u.* " +
+                            "FROM Users u " +
+                            "JOIN Friends f ON (u.UserID = f.FirstUserID) " +
+                            "WHERE f.SecondUserID = :userId " +
+                            "AND f.Status = 'Friend'", User.class
+            );
+            query.setParameter("userId", userId);
+            @SuppressWarnings("unchecked")
+            List<User> users = query.getResultList();
+            Query query1 = entityManager.createNativeQuery(
+                    "SELECT u.* " +
+                            "FROM Users u " +
+                            "JOIN Friends f ON (u.UserID = f.SecondUserID) " +
+                            "WHERE f.FirstUserID = :userId " +
+                            "AND f.Status = 'Friend'", User.class
+            );
+            query1.setParameter("userId", userId);
+            @SuppressWarnings("unchecked")
+            List<User> users1 = query1.getResultList();
+            users.addAll(users1);
+            return users;
         } finally {
             entityManager.close();
         }

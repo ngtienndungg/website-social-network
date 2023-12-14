@@ -2,6 +2,8 @@ package com.example.mangxahoi.Controller;
 
 import com.example.mangxahoi.Entity.Post;
 import com.example.mangxahoi.Entity.User;
+import com.example.mangxahoi.Service.FriendService.FriendService;
+import com.example.mangxahoi.Service.FriendService.FriendServiceImpl;
 import com.example.mangxahoi.Service.PostService.PostService;
 import com.example.mangxahoi.Service.PostService.PostServiceImpl;
 import com.example.mangxahoi.Service.UserService.UserService;
@@ -40,6 +42,9 @@ public class ProfileController extends HttpServlet {
                     Logger.getLogger(ProfileController.class.getName()).log(Level.INFO, String.valueOf(post.size()));
                     req.setAttribute("pathInfo", userId);
                     System.out.println(userId);
+                    FriendService friendService = new FriendServiceImpl();
+                    List<User> friends = friendService.getFriendList(Integer.parseInt(userId));
+                    req.setAttribute("friends", friends);
                     req.setAttribute("post", post);
                     req.setAttribute("user", user);
                     dispatcher.forward(req, resp);

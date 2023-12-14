@@ -5,10 +5,15 @@
 <%@ page import="com.example.mangxahoi.Service.FriendService.FriendService" %>
 <%@ page import="com.example.mangxahoi.Service.FriendService.FriendServiceImpl" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="com.example.mangxahoi.Entity.Friend" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    User user = (User) request.getAttribute("user");
+    User user = new User();
+    if (request.getAttribute("user") != null) {
+        user = (User) request.getAttribute("user");
+    }
+
     ArrayList<Post> posts;
     if (request.getAttribute("post") != null) {
         posts = (ArrayList<Post>) request.getAttribute("post");
@@ -16,6 +21,13 @@
         posts = new ArrayList<>();
     }
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
+
+    ArrayList<User> friends;
+    if (request.getAttribute("friends") != null) {
+        friends = (ArrayList<User>) request.getAttribute("friends");
+    } else {
+        friends = new ArrayList<>();
+    }
 %>
 
 <c:set var="userId" value=""/>
@@ -33,8 +45,12 @@
         }
     }
 
-    String profileId = request.getAttribute("pathInfo").toString();
-    System.out.println("Test: " + profileId);
+    String profileId = "";
+    if (request.getAttribute("pathInfo") != null) {
+        profileId = request.getAttribute("pathInfo").toString();
+    } else {
+        profileId = String.valueOf(currentUserId);
+    }
 
     FriendService friendService = new FriendServiceImpl();
     String friendStatus = friendService.getFriendStatus(user.getUserId(), currentUserId);
@@ -43,6 +59,7 @@
 <c:set var="profileId" value="<%= profileId %>"/>
 <c:set var="gender" value="<%= user.getGender() %>"/>
 <c:set var="status" value="<%= friendStatus %>"/>
+<c:set var="friends" value="<%= friends %>"/>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -89,11 +106,47 @@
             list-style-type: none;
             margin: 0;
             padding: 0;
+            display: flex; /* Hiển thị các phần tử trong menu theo chiều ngang */
         }
 
         .horizontal-menu li {
-            display: inline-block;
             margin-right: 10px;
+        }
+
+        .search-bar {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            align-items: center;
+            width: 400px;
+            padding: 5px;
+            margin-right: 5px;
+        }
+
+        .search-button {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .search-button:hover {
+            background-color: #45a049;
+        }
+
+        .link-style {
+            text-decoration: none;
+            color: #000;
+        }
+
+        .link-style {
+            text-decoration: none;
+            color: #000;
         }
 
         .link-style {
@@ -106,8 +159,7 @@
             display: flex;
             align-items: center;
         }
-
-        /* Tùy chỉnh chiều cao của header (thay đổi giá trị theo nhu cầu của bạn) */
+        
         header {
             height: 70px;
         }
@@ -372,6 +424,7 @@
         .btn-edit-profile {
             cursor: pointer;
         }
+
         #postDialog {
             display: none;
             position: fixed;
@@ -435,6 +488,7 @@
         #addImageButton {
             margin-right: 10px; /* Thêm margin-right để tạo khoảng cách giữa nút "Thêm ảnh" và nút "Đăng" */
         }
+
         #imageFrame {
             width: 100%; /* Đặt chiều rộng của khung ảnh là 100% */
             height: 300px; /* Đặt chiều cao của khung ảnh */
@@ -444,7 +498,7 @@
 
         #imagePreview {
             max-width: 100%;
-            max-height: 100%;/* Giữ chiều cao của ảnh không vượt qua chiều cao của khung */
+            max-height: 100%; /* Giữ chiều cao của ảnh không vượt qua chiều cao của khung */
             display: block;
             margin: auto;
         }
@@ -519,6 +573,10 @@
                 <li><a href="${pageContext.request.contextPath}/friend-request" class="link-style">Yêu cầu kết bạn</a></li>
                 <li><a href="${pageContext.request.contextPath}/profile/${cookie.userId.value}" class="link-style">Trang cá nhân</a></li>
                 <li><a href="${pageContext.request.contextPath}/logout" class="link-style">Đăng xuất</a></li>
+                <div class="search-bar">
+                    <input type="text" placeholder="Tìm kiếm..." class="search-input">
+                    <button class="search-button">Tìm kiếm</button>
+                </div>
             </ul>
         </nav>
     </header>
@@ -545,10 +603,14 @@
                                     <c:when test="${userId == profileId}">
                                         <form id="updateProfileForm" method="post"
                                               action="${pageContext.request.contextPath}/profile/${userId}/updateprofile">
-                                            <button type="submit" class="btn btn-primary btn-icon-text btn-edit-profile" id="editProfileButton">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                     stroke-linejoin="round" class="feather feather-edit btn-icon-prepend">
+                                            <button type="submit" class="btn btn-primary btn-icon-text btn-edit-profile"
+                                                    id="editProfileButton">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                     viewBox="0 0 24 24"
+                                                     fill="none" stroke="currentColor" stroke-width="2"
+                                                     stroke-linecap="round"
+                                                     stroke-linejoin="round"
+                                                     class="feather feather-edit btn-icon-prepend">
                                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                                                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                                                 </svg>
@@ -600,12 +662,12 @@
                                                 margin-bottom: 20px;
                                             }
                                         </style>
-                                            <input type="hidden" name="friendID" value="${profileId}" class="profile-form">
-                                            <input type="hidden" name="profile" value="profile">
-                                            <button type="submit"
-                                                    class="btn btn-primary btn-icon-text btn-edit-profile">
-                                                Hai bạn là bạn bè
-                                            </button>
+                                        <input type="hidden" name="friendID" value="${profileId}" class="profile-form">
+                                        <input type="hidden" name="profile" value="profile">
+                                        <button type="submit"
+                                                class="btn btn-primary btn-icon-text btn-edit-profile">
+                                            Hai bạn là bạn bè
+                                        </button>
 
                                         <style>
                                             .profile-form {
@@ -653,7 +715,7 @@
                     </div>
                     <div class="header-links">
                         <ul class="links d-flex align-items-center mt-3 mt-md-0">
-                            <li class="header-link-item d-flex align-items-center active">
+                            <li class="header-link-item ml-3 pl-3 border-left d-flex align-items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                      stroke-linejoin="round" class="feather feather-columns mr-1 icon-md">
@@ -680,8 +742,9 @@
                                     <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
                                     <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                                 </svg>
-                                <a class="pt-1px d-none d-md-block" href="#">Bạn bè <span
-                                        class="text-muted tx-12">3,765</span></a>
+                                <a class="pt-1px d-none d-md-block"
+                                   href="${pageContext.request.contextPath}/friend-list">Bạn bè <span
+                                        class="text-muted tx-12">${friends.size()}</span></a>
                             </li>
                             <li class="header-link-item ml-3 pl-3 border-left d-flex align-items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -708,7 +771,6 @@
             </div>
         </div>
         <div class="row profile-body">
-
             <div class="d-none d-md-block col-md-4 col-xl-3 left-wrapper">
                 <div class="card rounded">
                     <div class="card-body">
@@ -820,7 +882,10 @@
                 <div class="row">
                     <div class="col-md-12 grid-margin">
                         <c:set var="posts" value="<%= posts %>"/>
+
                         <c:set var="userName" value="<%= user.getFullName() %>"/>
+                        <c:choose>
+                        <c:when test="${not empty posts and posts.size() > 0}">
                         <c:forEach var="post" items="${posts}">
                             <div class="col-md-12">
                                 <div class="card rounded">
@@ -945,6 +1010,19 @@
                             </div>
                         </c:forEach>
                     </div>
+                    </c:when>
+                    <c:otherwise>
+                        <c:forEach var="friend" items="${friends}">
+                            <div class="d-flex align-items-center">
+                                <img class="img-xs rounded-circle"
+                                     src="https://bootdey.com/img/Content/avatar/avatar6.png" alt>
+                                <div class="ml-2">
+                                    <p>${friend.fullName}</p>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
         </div>
@@ -1019,11 +1097,12 @@
     }
 
     // Bắt sự kiện khi nhấn vào liên kết "Thông tin người dùng"
-    document.getElementById('userInfoLink').addEventListener('click', function(event) {
+    document.getElementById('userInfoLink').addEventListener('click', function (event) {
         event.preventDefault();
         // Mở dialog khi nhấn vào liên kết "Thông tin người dùng"
         openPostDialog();
     });
+
     function previewImage() {
         var input = document.getElementById('imageInput');
         var imagePreview = document.getElementById('imagePreview');
@@ -1048,7 +1127,7 @@
 
 </script>
 <script>
-    document.getElementById('editProfileButton').addEventListener('click', function(event) {
+    document.getElementById('editProfileButton').addEventListener('click', function (event) {
         event.preventDefault();
         openEditDialog();
     });

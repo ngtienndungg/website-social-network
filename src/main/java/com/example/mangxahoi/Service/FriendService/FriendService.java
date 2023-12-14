@@ -10,4 +10,5 @@ public interface FriendService {
     public void addFriend(int firstUserId, int secondUserId);
     public String getFriendStatus(int firstUserId, int secondUserId);
     public void rejectRequest(int firstUserId, int secondUserId);
+    public List<User> getFriendList(int userId);
 }

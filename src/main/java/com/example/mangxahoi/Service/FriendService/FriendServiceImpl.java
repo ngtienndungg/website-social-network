@@ -34,4 +34,9 @@ public class FriendServiceImpl implements FriendService {
         friendDAO.deleteFriend(firstUserId, secondUserId);
     }
 
+    @Override
+    public List<User> getFriendList(int userId) {
+        return friendDAO.findFriendByUserId(userId);
+    }
+
 }
