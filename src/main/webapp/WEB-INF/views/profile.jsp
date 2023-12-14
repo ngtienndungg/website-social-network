@@ -1040,8 +1040,10 @@
         <div id="imageFrame">
             <img id="imagePreview" alt="Image Preview">
         </div>
-        <button id="addImageButton" onclick="openImageInput()">Thêm ảnh</button>
-        <input type="file" name="imageInput" onchange="previewImage()">
+        <label for="imageInput" id="addImageButtonLabel" class="custom-file-upload">
+            Thêm ảnh
+        </label>
+        <input type="file" name="imageInput" id="imageInput" onchange="previewImage()" style="display:none;">
         <button type="submit" id="postButton">Đăng</button>
     </form>
 </div>

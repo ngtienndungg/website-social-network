@@ -1,8 +1,8 @@
 package com.example.mangxahoi.Controller;
 
-import com.example.mangxahoi.Entity.Post;
 import com.example.mangxahoi.Service.PostService.PostService;
 import com.example.mangxahoi.Service.PostService.PostServiceImpl;
+import com.example.mangxahoi.SupportModel.PostSupportModel;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -25,13 +25,10 @@ public class HomeController extends HttpServlet {
                 userId = Integer.parseInt(cookie.getValue());
             }
         }
+
         PostService postService = new PostServiceImpl();
-        List<Post> posts = postService.getPostOfFriends(userId);
-        System.out.println("SIZE " + posts.size());
-        for (Post post : posts) {
-            System.out.println(post.getContent());
-        }
-        req.setAttribute("posts", posts);
+        List<PostSupportModel> postsWithLikeCount = postService.getPostOfFriends(userId);
+        req.setAttribute("posts", postsWithLikeCount);
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/home.jsp");
         dispatcher.forward(req, resp);
     }

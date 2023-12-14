@@ -9,4 +9,5 @@ public interface PostDAO {
     void createPost(int userId, String content, String image);
     List<Post> findPostsOfFriends(int userId);
     void createLikeToPost(int userId, int postId);
+    long countLikesForPost(int postId);
 }

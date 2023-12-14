@@ -1,14 +1,15 @@
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="com.example.mangxahoi.Entity.Post" %>
+<%@ page import="com.example.mangxahoi.SupportModel.PostSupportModel" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    ArrayList<Post> posts;
+    ArrayList<PostSupportModel> posts;
     if (request.getAttribute("posts") != null) {
-        posts = (ArrayList<Post>) request.getAttribute("posts");
+        posts = (ArrayList<PostSupportModel>) request.getAttribute("posts");
     } else {
         posts = new ArrayList<>();
     }
@@ -107,6 +108,31 @@
         /* Tùy chỉnh chiều cao của header (thay đổi giá trị theo nhu cầu của bạn) */
         header {
             height: 70px;
+        }
+
+        #postDialog2 {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+            z-index: 1000;
+            height: 480px; /* Điều chỉnh chiều cao tại đây */
+        }
+
+        .commentSection {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px; /* Thêm padding nếu cần thiết */
+            background-color: #fff; /* Màu nền tùy chọn */
         }
     </style>
     <title>social network user profile example - Bootdey.com</title>
@@ -369,6 +395,7 @@
         .btn-edit-profile {
             cursor: pointer;
         }
+
         #postDialog {
             display: none;
             position: fixed;
@@ -431,9 +458,10 @@
         }
 
         #addImageButton {
-            margin-right: 10px; /* Thêm margin-right
-        #imageFrame {
-            width: 100%; /* Đặt chiều rộng của khung ảnh là 100% */
+            margin-right: 10px;
+            /* Thêm margin-right
+                   #imageFrame {
+                       width: 100%; /* Đặt chiều rộng của khung ảnh là 100% */
             height: 300px; /* Đặt chiều cao của khung ảnh */
             border: 1px solid #ccc; /* Đặt đường viền cho khung ảnh */
             overflow: hidden; /* Ngăn chặn ảnh vượt qua khung */
@@ -441,7 +469,7 @@
 
         #imagePreview {
             max-width: 100%;
-            max-height: 100%;/* Giữ chiều cao của ảnh không vượt qua chiều cao của khung */
+            max-height: 100%; /* Giữ chiều cao của ảnh không vượt qua chiều cao của khung */
             display: block;
             margin: auto;
         }
@@ -459,6 +487,7 @@
         #likeButton.active svg path {
             fill: red; /* Đổi màu hình trái tim khi nút đã được like */
         }
+
         .like-button {
             cursor: pointer;
             display: inline-flex;
@@ -480,8 +509,10 @@
         <nav>
             <ul class="horizontal-menu">
                 <li><a href="${pageContext.request.contextPath}/home" class="link-style">Trang chủ</a></li>
-                <li><a href="${pageContext.request.contextPath}/friend-request" class="link-style">Yêu cầu kết bạn</a></li>
-                <li><a href="${pageContext.request.contextPath}/profile/${cookie.userId.value}" class="link-style">Trang cá nhân</a></li>
+                <li><a href="${pageContext.request.contextPath}/friend-request" class="link-style">Yêu cầu kết bạn</a>
+                </li>
+                <li><a href="${pageContext.request.contextPath}/profile/${cookie.userId.value}" class="link-style">Trang
+                    cá nhân</a></li>
                 <li><a href="${pageContext.request.contextPath}/logout" class="link-style">Đăng xuất</a></li>
                 <div class="search-bar">
                     <form action="${pageContext.request.contextPath}/search" method="get">
@@ -502,13 +533,13 @@
                             <div class="card-header">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center">
-                                        <a href="${pageContext.request.contextPath}/profile/${post.userId.userId}">
+                                        <a href="${pageContext.request.contextPath}/profile/${post.post.userId}">
                                             <img class="img-xs rounded-circle"
                                                  src="https://bootdey.com/img/Content/avatar/avatar6.png" alt>
                                         </a>
                                         <div class="ml-2">
-                                            <p>${post.userId.fullName}</p>
-                                            <p>${post.timestamp.format(formatter)}</p>
+                                            <p>${post.post.userId.fullName}</p>
+                                            <p>${post.post.timestamp.format(formatter)}</p>
                                         </div>
                                     </div>
                                     <div class="dropdown">
@@ -577,24 +608,25 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <p class="mb-3 tx-14">${post.content}</p>
+                                <p class="mb-3 tx-14">${post.post.content}</p>
                                 <img class="img-fluid" src="../../../assets/images/sample2.jpg" alt>
                             </div>
                             <div class="card-footer">
                                 <div class="d-flex post-actions">
                                     <a href="javascript:;" class="d-flex align-items-center text-muted mr-4">
-                                        <div id="likeButton" onclick="toggleLike(this, ${post.postId})">
+                                        <div id="likeButton" onclick="toggleLike(this, ${post.post.postId})">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                  viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                                  class="feather feather-heart icon-md">
                                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                                             </svg>
+
                                             <p class="d-none d-md-block ml-2">Like</p>
                                         </div>
-
+                                        <p>(${post.likeCount})</p>
                                     </a>
-                                    <a href="javascript:;" class="d-flex align-items-center text-muted mr-4">
+                                    <a href="javascript:;" class="d-flex align-items-center text-muted mr-4 commentButton">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                              viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                              stroke-width="2"
@@ -623,6 +655,15 @@
                 </c:forEach>
             </div>
         </div>
+    </div>
+</div>
+<div id="postDialog2">
+    <span class="closeButton" onclick="closeCommentDialog()">&times;</span>
+
+
+    <div class="commentSection">
+        <textarea name="postContent" placeholder="Nhập nội dung comment"></textarea>
+        <button onclick="submitComment()">Đăng</button>
     </div>
 </div>
 <script>
@@ -654,6 +695,23 @@
             });
     }
 
+
+</script>
+
+<script>
+    // Bắt sự kiện cho nút Comment
+    document.querySelector('.commentButton').addEventListener('click', function (event) {
+        event.preventDefault();
+        openCommentDialog();
+    });
+
+    function openCommentDialog() {
+        document.getElementById('postDialog2').style.display = 'block';
+    }
+
+    function closeCommentDialog() {
+        document.getElementById('postDialog2').style.display = 'none';
+    }
 </script>
 </body>
 </html>

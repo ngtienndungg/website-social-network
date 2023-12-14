@@ -93,6 +93,17 @@ public class PostDAOImpl implements PostDAO {
 
         try {
             transaction.begin();
+            long existingLikesCount = entityManager.createQuery(
+                            "SELECT COUNT(l) FROM Like l WHERE l.userId.userId = :userId AND l.postId.postId = :postId",
+                            Long.class)
+                    .setParameter("userId", userId)
+                    .setParameter("postId", postId)
+                    .getSingleResult();
+
+            if (existingLikesCount > 0) {
+                return;
+            }
+
             User user = entityManager.find(User.class, userId);
             Post post = entityManager.find(Post.class, postId);
 
@@ -117,4 +128,18 @@ public class PostDAOImpl implements PostDAO {
         }
     }
 
+    @Override
+    public long countLikesForPost(int postId) {
+        try {
+            EntityManager entityManager = JPAConfiguration.getEntityManager();
+            TypedQuery<Long> query = entityManager.createQuery(
+                    "SELECT COUNT(l) FROM Like l WHERE l.postId.postId = :postId",
+                    Long.class
+            );
+            query.setParameter("postId", postId);
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return 0;
+        }
+    }
 }

@@ -28,6 +28,9 @@ public class Post {
     private List<Like> likes = new ArrayList<>();
 
     public List<Like> getLikes() {
+        if (likes == null) {
+            likes = new ArrayList<>();
+        }
         return likes;
     }
 
@@ -74,6 +77,7 @@ public class Post {
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
+
 
     @Override
     public boolean equals(Object o) {
