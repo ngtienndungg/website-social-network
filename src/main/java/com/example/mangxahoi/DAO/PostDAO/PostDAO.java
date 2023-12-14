@@ -8,4 +8,5 @@ public interface PostDAO {
     List<Post> findPostByUserId(int userId);
     void createPost(int userId, String content, String image);
     List<Post> findPostsOfFriends(int userId);
+    void createLikeToPost(int userId, int postId);
 }

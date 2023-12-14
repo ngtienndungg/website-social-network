@@ -2,6 +2,8 @@ package com.example.mangxahoi.Entity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Posts", schema = "dbo", catalog = "MangXaHoi")
@@ -22,6 +24,16 @@ public class Post {
     @Basic
     @Column(name = "Timestamp", nullable = false)
     private LocalDateTime timestamp;
+    @OneToMany(mappedBy = "postId", cascade = CascadeType.ALL)
+    private List<Like> likes = new ArrayList<>();
+
+    public List<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<Like> likes) {
+        this.likes = likes;
+    }
 
     public int getPostId() {
         return postId;

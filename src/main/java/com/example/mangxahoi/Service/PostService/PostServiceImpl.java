@@ -23,4 +23,9 @@ public class PostServiceImpl implements PostService {
     public List<Post> getPostOfFriends(int userId) {
         return postDAO.findPostsOfFriends(userId);
     }
+
+    @Override
+    public void actionLike(int userId, int postId) {
+        postDAO.createLikeToPost(userId, postId);
+    }
 }

@@ -1148,9 +1148,31 @@
     }
 
     function toggleLike(likeButton) {
-        likeButton.classList.toggle('active');
-    }
+        likeButton.classList.toggle('active'); fetch('/action-like', {
+            method: 'POST', // or 'GET' depending on your servlet configuration
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            // You can pass additional data to the servlet if needed
+            body: JSON.stringify({
+                // Add any data you want to send to the servlet here
+            }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Handle the response from the servlet if needed
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
 
+    }
 </script>
 
 

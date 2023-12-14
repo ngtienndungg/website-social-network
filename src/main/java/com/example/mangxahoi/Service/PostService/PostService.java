@@ -8,4 +8,5 @@ public interface PostService {
     List<Post> getPostByUserId(int userId);
     void uploadPost(int userId, String content, String image);
     List<Post> getPostOfFriends(int userId);
+    void actionLike(int userId, int postId);
 }

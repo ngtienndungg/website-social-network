@@ -583,7 +583,7 @@
                             <div class="card-footer">
                                 <div class="d-flex post-actions">
                                     <a href="javascript:;" class="d-flex align-items-center text-muted mr-4">
-                                        <div id="likeButton" onclick="toggleLike(this)">
+                                        <div id="likeButton" onclick="toggleLike(this, ${post.postId})">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                  viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -625,13 +625,37 @@
         </div>
     </div>
 </div>
-</div>
-</body>
-</html>
 <script>
-    function toggleLike(likeButton) {
+    function toggleLike(likeButton, postId) {
         likeButton.classList.toggle('active');
+
+        fetch('${pageContext.request.contextPath}/action-like', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'like',
+                postId: postId,
+            }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Handle the response from the servlet if needed
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
     }
 
 </script>
+</body>
+</html>
+
 

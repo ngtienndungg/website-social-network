@@ -1,5 +1,6 @@
 package com.example.mangxahoi.DAO.PostDAO;
 
+import com.example.mangxahoi.Entity.Like;
 import com.example.mangxahoi.Entity.Post;
 import com.example.mangxahoi.Entity.User;
 import com.example.mangxahoi.JPAManager.JPAConfiguration;
@@ -80,6 +81,37 @@ public class PostDAOImpl implements PostDAO {
             } else {
                 return Collections.emptyList();
             }
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public void createLikeToPost(int userId, int postId) {
+        EntityManager entityManager = JPAConfiguration.getEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+            User user = entityManager.find(User.class, userId);
+            Post post = entityManager.find(Post.class, postId);
+
+            if (user != null && post != null) {
+                Like like = new Like();
+                like.setUserId(user);
+                like.setPostId(post);
+                like.setTimestamp(LocalDateTime.now());
+                entityManager.persist(like);
+                post.getLikes().add(like);
+                transaction.commit();
+            } else {
+                transaction.rollback();
+            }
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
         } finally {
             entityManager.close();
         }
