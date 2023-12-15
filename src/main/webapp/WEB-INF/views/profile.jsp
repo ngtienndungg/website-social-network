@@ -601,7 +601,7 @@
                         <div class="cover-body d-flex justify-content-between align-items-center">
                             <div>
                                 <img class="profile-pic"
-                                     src="https://scontent.fsgn8-4.fna.fbcdn.net/v/t39.30808-6/368391007_1674296576410412_6409812752069589827_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=efb6e6&_nc_eui2=AeGtt12twZAdpue64srOXm2c-LtCIqRgH9D4u0IipGAf0Pg8GwVxlgN_n3F8IDf1wFOoSuw3PJaxKYpImLfwH6Dc&_nc_ohc=ZRcJFWiWF3UAX9fxarv&_nc_ht=scontent.fsgn8-4.fna&oh=00_AfAatlOVTAsge1pP6amnoVkpcS6wEPI3jbBnMEHzCYlklQ&oe=657C9580"
+                                     src="https://bootdey.com/img/Content/avatar/avatar6.png"
                                      alt="profile">
                                 <span class="profile-name"><%= ((User) request.getAttribute("user")).getFullName() %></span>
 
@@ -738,7 +738,12 @@
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="12" cy="7" r="4"></circle>
                                 </svg>
-                                <a class="pt-1px d-none d-md-block" href="#" id="userInfoLink">Tạo Bài Viết </a>
+                                <c:if test="${userId == profileId}">
+                                    <a class="pt-1px d-none d-md-block" href="#" id="userInfoLink">Tạo Bài Viết </a>
+                                </c:if>
+                                <c:if test="${userId != profileId}">
+                                    <a class="pt-1px d-none d-md-block" href="#" id="userInfoLink">..... </a>
+                                </c:if>
 
                             </li>
                             <li class="header-link-item ml-3 pl-3 border-left d-flex align-items-center">
